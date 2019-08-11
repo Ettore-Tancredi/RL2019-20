@@ -15,7 +15,7 @@ This is the repository where we are developing the _code_ that will guide our ro
  If in doubt, follow the Python Zen (`import this`).       
  If still in doubt, follow the Tao of programming: http://www.mit.edu/~xela/tao.html
 ###Indentation
- Indentations are made by a tab. Or Two spaces. It doesn't really matter.
+ Indentations are made by a tab. Or Two spaces. It doesn't really matter. The editor will sort it out anyway.
 ###Comments
 Comments should respect these parameters:    
 
