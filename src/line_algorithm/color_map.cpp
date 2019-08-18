@@ -92,7 +92,8 @@ int dfs(int i, int j, int isl, int target)
 }
 
 
-extern "C" void load_training_data()
+//TENERE
+void load_training_data()
 {
   std::ifstream in("color_data.txt");
 
@@ -112,8 +113,8 @@ extern "C" void load_training_data()
 //PYTHON INTERFACE
 /*****************************************************
 int* load_image(image RGB matrix, height, width)
-	- copies the input image into the gloabal variable.
-	- resets all the global variable for the new frame
+	- copies the input image into the global variable.
+	- resets all the global variables for the new frame
 	- launches a dfs each time it finds an univisited black
 		pixel along the borders.
 	- Decides which strategy to apply based on the collected
