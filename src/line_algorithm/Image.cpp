@@ -1,4 +1,11 @@
 #include "Image.h"
+#include <opencv2/opencv.hpp> 
+
+Image::Image(int h, int w)
+{
+  H = h;
+  W = w;
+}
 
 coord Image::Gpx_coord(int i)
 {
@@ -8,29 +15,21 @@ coord Image::Gpx_coord(int i)
 
 void Image::get_debug_color(int i, int j, int &t1, int &t2, int &t3)
 {
-  val[i][j].get_color(t1, t2, t3);
+  cv::Vec3b pixel = val.at<Vec3b>(i, j); 
+  t1 = pixel.val[0];
+  t2 = pixel.val[1];
+  t3 = pixel.val[2];
 }
 
-void Image::copy(int mat[H][W][4])
+void Image::clear()
 {
-  int t1, t2, t3;
-  for (int i = 0; i < H; ++i)
-  {
-    for (int j = 0; j < W; ++j)
-    {
-      t1 = mat[i][j][0];
-      t2 = mat[i][j][1];
-      t3 = mat[i][j][2];
-
-      val[i][j].fill(t1, t2, t3);
+  for(int i = 0; i < H; ++i)
+    for(int j = 0; j < W; ++j)
       visited[i][j] = 0;
-    }
-  }
 
   regions.clear();
   green_pixels.clear();
   green_regions = 0;
-
 }
 
 bool Image::find_region(char region_type)
@@ -75,7 +74,7 @@ Colors Image::mostFrequentNeightbour(int i, int j)
     new_j = j + j_adj[c];
     if(0 <= new_i && new_i < H && 0 <= new_j && new_j < W)
     {
-      temp = val[new_i][new_j].color();
+      temp = val.px_color(new_i, new_j);
       switch(temp)
       {
         case WHITE:
@@ -121,16 +120,22 @@ Colors Image::mostFrequentNeightbour(int i, int j)
 
 Colors Image::px_color(int i, int j)
 {
-    Colors col = val[i][j].color();
-    /*if (col == UNKNOWN)
-    {
-        filter(i, j);
-        col = val[i][j].color();
-        if (col == UNKNOWN)
-          col = mostFrequentNeightbour(i, j);
-    }*/
+    cv::Vec3b pixel = val.at<Vec3b>(i, j);
+    int R, G, B;
 
-    return col;
+    R = pixel.val[0];
+    G = pixel.val[1];
+    B = pixel.val[2];
+
+    if (dataset[R][G][B] == BLACK)
+      return BLACK;
+    else if (dataset[R][G][B] == WHITE)
+      return WHITE;
+    else if(dataset[R][G][B] == GREEN)
+      return GREEN;
+    else if(dtataset[R][G][B] == SILVER)
+      return SILVER;
+
 }
 
 int Image::width()
@@ -141,38 +146,6 @@ int Image::height()
 {
     return H;
 }
-
-void Image::filter(int i, int j)
-{
-  int i_adj[] = {0, 1, 1, 1, 0, -1, -1, -1};
-  int j_adj[] = {1, 1, 0, -1, -1, -1, 0, 1};
-  int R_temp, G_temp, B_temp;
-
-  val[i][j].get_color(R_temp, G_temp, B_temp);
-  int num = 1;
-  int R_media = R_temp;
-  int G_media = G_temp;
-  int B_media = B_temp;
-
-  int new_i, new_j;
-
-  for(int c = 0; c < 8; c++)
-  {
-    new_i = i + i_adj[c];
-    new_j = j + j_adj[c];
-    if(0 <= new_i && new_i < H && 0 <= new_j && new_j < W)
-    {
-      val[new_i][new_j].get_color(R_temp, G_temp, B_temp);
-      R_media += R_temp;
-      G_media += G_temp;
-      B_media += B_temp;
-      ++num;
-    }
-  }
-
-  val[i][j].fill(int(R_media / num), int(G_media / num), int(B_media / num));
-}
-
 
 int Image::num_G_pixels()
 {
@@ -196,21 +169,21 @@ bool Image::is_inside(int i, int j)
 
 bool Image::isValid(int i, int j, int target)
 {
-    bool val = false;
+    bool flag = false;
 
 		for (int c = -1; c < 2; ++c)
 			for (int t = -1; t < 2; ++t)
 				if (is_inside(i + c, j + t) && !(c == 0 && t == 0))
         {
           if (target == BLACK && (px_color(i+c, j+t) == GREEN || px_color(i+c, j+t) == WHITE || (i == 0 || i == H - 1 || j == 0 || j == W - 1)))
-            val |= true;
+            flag |= true;
           else if (target == WHITE && (px_color(i+c, j+t) == BLACK || px_color(i+c, j+t) == GREEN|| (i == 0 || i == H - 1 || j == 0 || j == W - 1)))
-            val|= true;
+            flag|= true;
           else if (target == GREEN && (px_color(i+c, j+t) == BLACK || px_color(i+c, j+t) == WHITE || (i == 0 || i == H - 1 || j == 0 || j == W - 1)))
-            val|= true;  
+            flag|= true;  
         }
 
-		return val;
+		return flag;
 }
 
 

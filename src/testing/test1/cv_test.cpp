@@ -18,11 +18,14 @@ int main(int argc, char* argv[])
         cin.get(); //wait for any key press
         return -1;
     } 
+    cap.set(CAP_PROP_FRAME_WIDTH, 200);
+    cap.set(CAP_PROP_FRAME_HEIGHT, 200);
+    cap.set(CAP_PROP_FPS, 30);
 
     double dWidth = cap.get(CAP_PROP_FRAME_WIDTH); //get the width of frames of the video
     double dHeight = cap.get(CAP_PROP_FRAME_HEIGHT); //get the height of frames of the video
 
-    cout << "Resolution of the video : " << dWidth << " x " << dHeight << endl;
+    cout << "Resolution of the video : " << dWidth << " x " << dHeight << " " << cap.get(CAP_PROP_FPS) << endl;
     fail();
     string window_name = "My Camera Feed";
     namedWindow(window_name); //create a window called "My Camera Feed"

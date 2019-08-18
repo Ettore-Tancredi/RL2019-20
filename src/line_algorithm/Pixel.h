@@ -13,7 +13,7 @@ enum Colors
 };
 int dataset[256][256][256];
 
-class Pixel
+/*class Pixel
 {
 private:
     int R,G,B;
@@ -47,10 +47,10 @@ int min(int a, int b, int c)
 
 Colors Pixel::color()
 {
-  /*if ((R + G + B)/3 > 75)
+  if ((R + G + B)/3 > 75)
 		return WHITE;
 	else if ((R + G + B)/3 <= 75)
-		return BLACK;*/
+		return BLACK;
   if (dataset[R][G][B] == BLACK)
     return BLACK;
   else if (dataset[R][G][B] == WHITE)
@@ -69,8 +69,7 @@ void Pixel::fill(int r, int g, int b)
   R = r;
   G = g;
   B = b;
-}
-
+}*/
 
 
 #endif

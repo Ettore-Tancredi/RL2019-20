@@ -11,10 +11,12 @@
 #include "Pixel.h"
 #include "Line.h"
 
-Image img;
-Line line;
 const int H = 200;
 const int W = 200;
+
+Image img(H, W);
+Line line;
+
 int instr[H*W+400];
 const int MIN_NODES = 20;
 
@@ -125,7 +127,7 @@ int* load_image(image RGB matrix, height, width)
 
 extern "C" int* load_image(int arr[H][W][4])
 {
-	img.copy(arr);
+	img.clear();
 //	img.load_training_data("data.txt");
 	line.barycentre.first = 0;
 	line.barycentre.second = 0;
