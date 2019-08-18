@@ -1,3 +1,0 @@
-/home/luigi/source/repos/rl_2019-20/src/testing/open_img/build/CMakeFiles/rebuild_cache.dir
-/home/luigi/source/repos/rl_2019-20/src/testing/open_img/build/CMakeFiles/cv_test.dir
-/home/luigi/source/repos/rl_2019-20/src/testing/open_img/build/CMakeFiles/edit_cache.dir
