@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
         cin.get(); //wait for any key press
         return -1;
     } 
-    cap.set(CAP_PROP_FRAME_WIDTH, 200);
-    cap.set(CAP_PROP_FRAME_HEIGHT, 200);
+    cap.set(CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(CAP_PROP_FRAME_HEIGHT, 480);
     cap.set(CAP_PROP_FPS, 30);
 
     double dWidth = cap.get(CAP_PROP_FRAME_WIDTH); //get the width of frames of the video
@@ -29,7 +29,6 @@ int main(int argc, char* argv[])
     fail();
     string window_name = "My Camera Feed";
     namedWindow(window_name); //create a window called "My Camera Feed"
-    
     while (true)
     {
         Mat frame;
@@ -56,7 +55,7 @@ int main(int argc, char* argv[])
             break;
         }
     }
-
+*/
     return 0;
 
 }
