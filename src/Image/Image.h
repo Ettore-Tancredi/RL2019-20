@@ -2,6 +2,7 @@
 #include <iostream> //debug purposes
 #include <string>
 #include <fstream>
+#include <stack>
 #include <opencv2/opencv.hpp>  
 
 #ifndef IMAGE_H
@@ -36,6 +37,8 @@ public:
     Image(int, int);
 
     int visited[MAX_DIM][MAX_DIM];
+    std::stack< std::pair<int, int> > green_pixels;
+    std::vector< std::pair<int, int> > green_regions;
 
     void clear();
     
@@ -53,9 +56,10 @@ public:
 
 
     int matchesTarget(int, int);
+    bool matchesGreenTarget(int, int);
     bool is_inside(int, int);
 
-    void get_debug_color(int, int, int &, int &, int &);
+    void get_debug_color(int, int/*, int &, int &, int &*/);
 
     void load_data();
 };

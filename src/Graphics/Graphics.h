@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <opencv2/opencv.hpp>
-
+#include "Image.h"
+#include <vector>
+#include <utility>
 struct BGR
 {
     int B;
@@ -30,7 +32,8 @@ class Graphics
         
         void draw(cv::Mat&);
 
-        void process(cv::Mat&, int[800][800]);
+        void outline(cv::Mat&, int[800][800], std::vector<std::pair<int, int> >&);
+        void surface(cv::Mat&, int[800][800], Image&);
 };
 
 

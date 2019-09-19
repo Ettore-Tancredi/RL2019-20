@@ -2,6 +2,8 @@
 #include <opencv2/opencv.hpp> 
 #include <iostream>
 #include <fstream>
+#include <stack>
+#include <utility>
 
 extern int color_set[256][256][256];
 
@@ -39,6 +41,9 @@ void Image::clear()
       visited[i][j] = 0;
 
   regions.clear();
+  std::stack< std::pair<int, int> > temp;
+  green_pixels.swap(temp);
+  green_regions.clear();
 }
 
 
@@ -83,7 +88,7 @@ Colors Image::px_color(int i, int j)
     G = pixel.val[1];
     R = pixel.val[2];
 
-    if (color_set[B][G][R] == BLACK)
+    if (color_set[R][G][B] == BLACK)
       return BLACK;
     else if (color_set[R][G][B] == WHITE)
       return WHITE;
@@ -99,12 +104,14 @@ bool Image::is_inside(int i, int j)
 }
 
 
-void Image::get_debug_color(int i, int j, int &t1, int &t2, int &t3)
+void Image::get_debug_color(int i, int j/*, int &t1, int &t2, int &t3*/)
 {
   cv::Vec3b pixel = image.at<cv::Vec3b>(i, j); 
-  t1 = pixel.val[0];
-  t2 = pixel.val[1];
-  t3 = pixel.val[2];
+  int t1 = pixel.val[0];
+  int t2 = pixel.val[1];
+  int t3 = pixel.val[2];
+
+  std::cout << t1 << " " << t2 << " " << t3 << " " << color_set[t3][t2][t1] << std::endl;
 }
 
 
@@ -115,10 +122,17 @@ int Image::matchesTarget(int i, int j)
 
   for (int c = -1; c < 2; ++c)
 		for (int t = -1; t < 2; ++t)
+    {
       if(!is_inside(i + c, j + t) && !(c == 0 && t == 0))
         isOnBorder = true;
       else if(px_color(i + c, j + t) == WHITE)
         isNextToWhite = true;
+      else if(px_color(i + c, j + t) == GREEN)
+      {
+        isNextToWhite = true;
+        green_pixels.push(std::make_pair(i + c, j + t));
+      }
+    }
 
   if(isOnBorder && isNextToWhite)
     return CORNER_PIXEL;
@@ -128,9 +142,26 @@ int Image::matchesTarget(int i, int j)
   return false;
 }
 
+bool Image::matchesGreenTarget(int i, int j)
+{
+  if(px_color(i, j) != GREEN)
+    return false;
+  for(int c = -1; c < 2; ++c)
+    for(int t = -1; t < 2; ++t)
+    {
+      if(!is_inside(i + c, j + t))
+        return true;
+      if(px_color(i + c, j + t) == BLACK)
+        return true;
+      if(px_color(i + c, j + t) == WHITE)
+        return true;
+    }
+    return false;
+}
+
 void Image::load_data()
 {
-  std::ifstream datafile("Data/color_data.txt");
+  std::ifstream datafile("/home/luigi/source/repos/rl_2019-20/src/Data/color_data.txt");
   for (int i = 0; i < 256; ++i)
   {
     for (int j = 0; j < 256; ++j)

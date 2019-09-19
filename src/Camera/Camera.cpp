@@ -28,7 +28,7 @@ void Camera::fillFrame(cv::Mat &frame, int temp)
 {
    // bool b = cap.read(frame);
    bool b = true;
-   frame = cv::imread("/home/luigi/source/repos/rl_2019-20/runs/3-3-12_56/" + std::to_string(temp) + ".png" );
+   frame = cv::imread("/home/luigi/source/repos/rl_2019-20/runs/3-3-12_56/" + std::to_string(temp) + ".png", cv::IMREAD_COLOR);  
     if (!b)
         std::cout << "CAZZO" << std::endl;
 

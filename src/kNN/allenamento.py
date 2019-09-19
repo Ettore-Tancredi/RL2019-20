@@ -13,7 +13,7 @@ canvas.create_image(0, 0, image = photo2, anchor = NW)
 canvas.pack()
 
 file_path = 'allenamento.txt'
-file_path2 = 'check.txt'
+#file_path2 = 'check.txt'
 
 line1 = canvas.create_line(0,0, 0, 0)
 line2 = canvas.create_line(0,0, 0, 0)
@@ -22,7 +22,7 @@ line4 = canvas.create_line(0,0, 0, 0)
 
 
 file1 = open(file_path, 'a')
-file2 = open(file_path2, 'a')
+#file2 = open(file_path2, 'a')
 
 def ButtonOnePressed(event):
     global firstPress
@@ -51,19 +51,19 @@ def ButtonOneReleased(event):
 
     color = input("Colore: ")  # w for WHITE, b for BLACK, g for GREEN, s for SILVER
 
-    #r, g, b = 0, 0, 0
+    r, g, b = 0, 0, 0
 
     for i in range(firstPress.x, lastPress.x):
         for j in range(firstPress.y, lastPress.y):
-            file2.write(str(px[i, j][0]) + ' ' + str(px[i, j][1]) + ' ' + str(px[i, j][2]) + ' ' + color + '\n')
-            #r = r + px[i, j][0]
-            #g = g + px[i, j][1]
-            #b = b + px[i, j][2]
+            #file2.write(str(px[i, j][0]) + ' ' + str(px[i, j][1]) + ' ' + str(px[i, j][2]) + ' ' + color + '\n')
+            r = r + px[i, j][0]
+            g = g + px[i, j][1]
+            b = b + px[i, j][2]
 
-    #r = int(r/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
-    #g = int(g/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
-    #b = int(b/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
-    #file1.write(str(r) + ' ' + str(g) + ' ' + str(b) + ' ' + color + '\n')
+    r = int(r/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
+    g = int(g/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
+    b = int(b/((lastPress.x - firstPress.x) * (lastPress.y - firstPress.y)))
+    file1.write(str(r) + ' ' + str(g) + ' ' + str(b) + ' ' + color + '\n')
 
 
 def ButtonOneMotion(event):
