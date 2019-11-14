@@ -10,7 +10,6 @@ Line::Line()
     for(int i = 0; i < 2; ++i)
         for(int j = 0; j < 2; ++j)
             greenPos[i][j] = false;
-    corners.clear();
 }
 
 void Line::clear()
@@ -22,5 +21,6 @@ void Line::clear()
     for(int i = 0; i < 2; ++i)
         for(int j = 0; j < 2; ++j)
             greenPos[i][j] = false;
-    corners.clear();
+
+    pixels_list.clear();
 }

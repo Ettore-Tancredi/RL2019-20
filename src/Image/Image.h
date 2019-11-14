@@ -34,7 +34,7 @@ private:
     std::vector<char>regions;
 
 public:
-    Image(int, int);
+    Image(int, int); //height width
 
     int visited[MAX_DIM][MAX_DIM];
     std::stack< std::pair<int, int> > green_pixels;

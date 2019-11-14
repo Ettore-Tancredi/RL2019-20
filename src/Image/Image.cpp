@@ -11,7 +11,6 @@ Image::Image(int h, int w)
 {
   H = h;
   W = w;
-  std::cout << "porca puttana" << std::endl;
 }
 
 cv::Mat Image::copy()
@@ -159,9 +158,18 @@ bool Image::matchesGreenTarget(int i, int j)
     return false;
 }
 
-void Image::load_data()
+
+/* VOID LOAD_DATA( STRING FILE_NAME )
+
+    - called on boot
+
+    -  assigns to each element of the color space (C[i][j][k] with 0 <= i,j,k < 256)
+      the label established during training 
+*/
+
+void Image::load_data(std::string file_name)
 {
-  std::ifstream datafile("/home/luigi/source/repos/rl_2019-20/src/Data/color_data.txt");
+  std::ifstream datafile(file_name);
   for (int i = 0; i < 256; ++i)
   {
     for (int j = 0; j < 256; ++j)

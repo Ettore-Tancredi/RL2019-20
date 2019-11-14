@@ -5,7 +5,7 @@ find_package( OpenCV REQUIRED )
 
 
 include_directories(Line graphics camera Image ${OpenCV_INCLUDE_DIRS} )
-set(SOURCES Image/Image.cpp Graphics/Graphics.cpp Camera/Camera.cpp Line/Line.cpp main.cpp)
+set(SOURCES Image/Image.cpp Graphics/Graphics.cpp Camera/Camera.cpp Line/Line.cpp Line/Rig.cpp main.cpp)
 
 
 

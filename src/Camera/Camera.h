@@ -12,7 +12,7 @@ class Camera
     public:
         Camera(bool &); //flag
         Camera(bool &, double, double, double); //flag, framerate, H, W
-        void fillFrame(cv::Mat &m, int );
+        void fillFrame(cv::Mat &, int );
 };
 
 

@@ -1,29 +1,25 @@
 #include <opencv2/opencv.hpp>
-#include <iostream>
-#include <stack>
-#include <utility>
-#include <chrono>
-#include <vector>
 
+#include "types.h"
+#include "rmath.h"
 
 #include "Image/Image.h"
 #include "Camera/Camera.h"
 #include "Graphics/Graphics.h"
 #include "Line/Line.h"
+#include "Line/Rig.h"
 
-bool sides[4] = {};
 
 int color_set[256][256][256];
 
-using coord = std::pair<int, int>;
-
-//TENERE
 
 void analyse(Image &img, Line &line)
 {
+	bool sides_touched[4] = {};
+	
 	img.clear();
 	for (int i = 0; i < 4; ++i)
-		sides[i] = false;
+		sides_touched[i] = false;
 
 	//BLACK LINE
 
@@ -63,6 +59,7 @@ void analyse(Image &img, Line &line)
 
 						line.barycentre.first += i;		
 						line.barycentre.second += j;
+						line.pixels_list.push_back(std::make_pair(i, j));
 						++line.num_nodes;
 
 						img.visited[i][j] = 1;
@@ -80,7 +77,7 @@ void analyse(Image &img, Line &line)
 	{
 		if (img.visited[img.height()-1][j])
 		{
-			sides[0] = true;
+			sides_touched[0] = true;
 			break;
 		}
 	}
@@ -88,7 +85,7 @@ void analyse(Image &img, Line &line)
 	{
 		if (img.visited[i][img.width()-1])
 		{
-			sides[1] = true;
+			sides_touched[1] = true;
 			break;
 		}
 	}
@@ -96,7 +93,7 @@ void analyse(Image &img, Line &line)
 	{
 		if (img.visited[0][j])
 		{
-			sides[2] = true;
+			sides_touched[2] = true;
 			break;
 		}
 	}
@@ -104,7 +101,7 @@ void analyse(Image &img, Line &line)
 	{
 		if (img.visited[i][0])
 		{
-			sides[3] = true;
+			sides_touched[3] = true;
 			break;
 		}
 	}
@@ -165,10 +162,6 @@ void analyse(Image &img, Line &line)
 		
 }
 
-double distance(int i1, int j1, int i2, int j2)
-{
-	return sqrt((i1 - i2)*(i1 - i2) + (j1 -j2)*(j1 - j2));
-}
 
 
 /*void CallBackFunc(int event, int x, int y, int flags, void* userdata)
@@ -201,7 +194,6 @@ double distance(int i1, int j1, int i2, int j2)
 	if (i2 > 0 && i1 > 0 && i2 - i1 > lineW)
 	{
 		line.num_corners +=2;
-		line.corners.push_back(std::make_pair(int((i1 + i2) / 2)), 0);
 	}
 	else if (i2 > 0 || i1 > 0)
 		++line.num_corners;
@@ -230,7 +222,6 @@ double distance(int i1, int j1, int i2, int j2)
 	if (i2 > 0 && i1 > 0 && i2 - i1 > lineW)
 	{
 		line.num_corners +=2;
-		line.corners.push_back(std::make_pair(int((i1 + i2) / 2)), W - 1);
 	}
 	else if (i2 > 0 || i1 > 0)
 		++line.num_corners;
@@ -259,7 +250,6 @@ double distance(int i1, int j1, int i2, int j2)
 	if (j2 > 0 && j1 > 0 && j2 - j1 > lineW)
 	{
 		line.num_corners +=2;
-		line.corners.push_back(std::make_pair(0, int((j1 + j2) / 2)));
 	}
 	else if (j2 > 0 || j1 > 0)
 		++line.num_corners;
@@ -288,7 +278,6 @@ double distance(int i1, int j1, int i2, int j2)
 	if (j2 > 0 && j1 > 0 && j2 - j1 > lineW)
 	{
 		line.num_corners +=2;
-		line.corners.push_back(std::make_pair(H - 1, int((j1 + j2) / 2)));
 	}
 	else if (j2 > 0 || j1 > 0)
 	{
@@ -302,13 +291,15 @@ double distance(int i1, int j1, int i2, int j2)
 			
 }
 
+
+
 void greenRegionsPosition(Image &img, Line &line)
 {
 	int i_g, j_g;
 	bool up, left;
 	int v_idx, o_idx;
 
-	for(std::vector< std::pair<int, int> >::iterator it = img.green_regions.begin(); it != img.green_regions.end(); it++)
+	for(coord_vector::iterator it = img.green_regions.begin(); it != img.green_regions.end(); it++)
 	{
 		i_g = it->first;
 		j_g = it->second;
@@ -346,24 +337,26 @@ void greenRegionsPosition(Image &img, Line &line)
 
 int main()
 {	
-	Image img(400, 400); //fps   H    W
-	img.load_data();
+	Image img(400, 400); //ARG: height width
+	img.load_data("/home/luigi/source/repos/rl_2019-20/src/Data/color_data.txt");
 
   	Line line;
-	Graphics graphics("ciccio");
+	Rig rig(10); //ARG: number of point for the skeleton
+	Graphics graphics("feed"); //ARG: window name
+
 	
 	bool camera_opened = true;
     Camera camera(camera_opened, 30, 400, 400);
-	
-	
 	if (!camera_opened)   
-		std::cout << "Merda" << std::endl;
+		std::cout << "Camera unavailable" << std::endl;
+
+
 
     cv::Mat processed_frame;
 
 	bool silver_found = false;
 	
-	int temp = 1;
+	int img_number = 1;
 	int arr[2];
     while(camera_opened && !silver_found)
     {
@@ -371,11 +364,17 @@ int main()
 
 		std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 		
-        camera.fillFrame(img.getImage(), ++temp);		
+        camera.fillFrame(img.getImage(), ++img_number);		
 
 		line.clear();  
         analyse(img, line);
 		count_corners(line, img.visited, img.height(), img.width(), 20);
+		rig.make_rig(line.pixels_list, line.num_nodes);
+
+		// for (int i = 0; i < rig.num_points; ++i)
+		// 	std::cout << rig.right_points[i].first << " " << rig.right_points[i].second << "\n";
+
+		std::cout << line.num_nodes/(2*rig.num_points) << std::endl;
 
 		std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
@@ -386,9 +385,9 @@ int main()
 		cv::waitKey(0);
 
 		
-		std::cout << "Numero di nodi neri:   " << line.num_nodes << std::endl;
-		std::cout << "Numero di vertici:  " << line.num_corners << std::endl;
-		std::cout << "Numero regioni verdi" << img.green_regions.size() << std::endl;
+		std::cout << "Numero di nodi neri:  " << line.num_nodes << std::endl;
+		std::cout << "Numero di vertici:    " << line.num_corners << std::endl;
+		std::cout << "Numero regioni verdi: " << img.green_regions.size() << std::endl;
 		for (auto i : img.green_regions)
 			std::cout << "barycentre " << i.first << i.second << std::endl;
 
@@ -402,15 +401,19 @@ int main()
 			std::cout << std::endl;
 		}
 
+		
+
+
+		
         graphics.outline(processed_frame, img.visited, img.green_regions);
-		//graphics.surface(processed_frame, img.visited, img);
+	//	graphics.surface(processed_frame, img.visited, img);
+		graphics.apply_rig(processed_frame, rig);
         graphics.draw(processed_frame);
 
 		cv::waitKey(0);
 		
         
     }
-
 
 
     return 0;

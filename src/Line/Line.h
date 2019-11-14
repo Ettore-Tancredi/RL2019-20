@@ -19,8 +19,8 @@ class Line
         int num_nodes;
         int num_corners;
         bool greenPos[2][2];
-        std::vector< std:pair<int, int> > corners;
 
+        std::vector<std::pair<int, int> > pixels_list;
 };
 
 #endif 
