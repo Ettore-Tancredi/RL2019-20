@@ -13,10 +13,4 @@ using coord = std::pair<int, int>;
 using coord_vector = std::vector<coord>;
 
 
-
-
-
-
-
-
 #endif

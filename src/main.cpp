@@ -345,7 +345,7 @@ int main()
 			//	rig.make_rig(line.pixels_list, line.num_nodes);
 
 			//CALCULATING ERROR
-			//...
+			//... aggiungere tutta la roba, prende rig in input
 
 			log.stop_clock();
 
