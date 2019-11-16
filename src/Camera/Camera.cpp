@@ -29,6 +29,7 @@ void Camera::fillFrame(cv::Mat &frame, int img_number)
     // bool b = cap.read(frame);
     // if (!b)
     //     std::cout << "Unable to take photo" << std::endl;
+    // SAVE AS img_number.png
 
     bool b = true;
     frame = cv::imread("/home/luigi/source/repos/rl_2019-20/runs/3-3-12_56/" + std::to_string(img_number) + ".png", cv::IMREAD_COLOR);

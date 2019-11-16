@@ -5,6 +5,8 @@
 #include <stack>
 #include <opencv2/opencv.hpp>  
 
+#include "types.h"
+
 #ifndef IMAGE_H
 #define IMAGE_H
 
@@ -61,7 +63,7 @@ public:
 
     void get_debug_color(int, int/*, int &, int &, int &*/);
 
-    void load_data();
+    void load_data(std::string);
 };
 
 

@@ -21,6 +21,9 @@ class Line
         bool greenPos[2][2];
 
         std::vector<std::pair<int, int> > pixels_list;
+
+
+        void show_data(); //DBG func
 };
 
 #endif 

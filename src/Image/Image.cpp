@@ -40,8 +40,8 @@ void Image::clear()
       visited[i][j] = 0;
 
   regions.clear();
-  std::stack< std::pair<int, int> > temp;
-  green_pixels.swap(temp);
+  std::stack<coord> clear;
+  green_pixels.swap(clear);
   green_regions.clear();
 }
 
