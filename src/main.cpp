@@ -354,7 +354,7 @@ int main()
 			cv::waitKey(0);
 			cv::Mat processed_frame = img.copy();
 			graphics.outline(processed_frame, img.visited, img.green_regions);
-			//	graphics.surface(processed_frame, img.visited, img);
+			//graphics.surface(processed_frame, img.visited, img);
 			//	graphics.apply_rig(processed_frame, rig);
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
