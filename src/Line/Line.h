@@ -7,6 +7,8 @@
 #include <stack>
 #include <vector>
 
+#include "cv_types.h"
+
 class Line
 {
     private:
@@ -20,8 +22,8 @@ class Line
         int num_corners;
         bool greenPos[2][2];
 
-        std::vector<std::pair<int, int> > pixels_list;
-
+        coord_vector pixels_list;
+        coord_vector vertexes;
 
         void show_data(); //DBG func
 };

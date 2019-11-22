@@ -18,7 +18,7 @@ cv::Mat Image::copy()
   return image;
 }
 
-cv::Mat& Image::getImage()
+cv::Mat& Image::passImage()
 {
   return image;
 }

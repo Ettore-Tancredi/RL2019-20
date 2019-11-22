@@ -5,7 +5,7 @@
 #include <stack>
 #include <opencv2/opencv.hpp>  
 
-#include "types.h"
+#include "cv_types.h"
 
 #ifndef IMAGE_H
 #define IMAGE_H
@@ -47,7 +47,7 @@ public:
     int height();
     int width();
     Colors px_color(int, int);
-    cv::Mat& getImage();
+    cv::Mat& passImage();
     cv::Mat copy();
 
 

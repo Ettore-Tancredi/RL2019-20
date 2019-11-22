@@ -25,4 +25,6 @@ void Log::save()
 {
     for (int i = 0; i < execution_time.size(); ++i)
         log_file << i << " " << execution_time[i].count()<< "\n";
+
+    log_file.close();
 }

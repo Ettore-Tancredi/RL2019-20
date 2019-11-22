@@ -1,7 +1,6 @@
 #include <opencv2/opencv.hpp>
 
-#include "types.h"
-#include "rmath.h"
+#include "cv_types.h"
 
 #include "Image/Image.h"
 #include "Camera/Camera.h"
@@ -36,7 +35,7 @@ void outline_line(Image &img, Line &line)
 			{
 				//INIZIO DFS
 				std::stack<coord> stack;
-				stack.push(std::make_pair(img.height() - 1, x));
+				stack.push(coord(img.height() - 1, x));
 
 				while (!stack.empty())
 				{
@@ -116,7 +115,7 @@ void outline_green_regions(Image &img, Line &line)
 		{
 			// DFS on green borders
 			std::stack<coord> stack;
-			stack.push(std::make_pair(it.first, it.second));
+			stack.push(it);
 			std::pair<int, int> barycentre;
 			int num_green_pixels = 0;
 
@@ -152,9 +151,10 @@ void outline_green_regions(Image &img, Line &line)
 	}
 }
 
-void count_corners(Line &line, int visited[800][800], int H, int W, int lineW)
+
+void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 {
-	//LEFT
+		//LEFT
 	int i1 = -1, i2 = -1;
 	for (int i = 0; i < H; ++i)
 		if (visited[i][0] == 2)
@@ -176,14 +176,15 @@ void count_corners(Line &line, int visited[800][800], int H, int W, int lineW)
 		line.num_corners += 2;
 	}
 	else if (i2 > 0 || i1 > 0)
-		++line.num_corners;
+		++line.num_corners;	
 
 	for (int i = 0; i < H; ++i)
 		if (visited[i][0] == 2)
 			visited[i][0] = 1;
-
-	//RIGHT
-	i1 = -1, i2 = -1;
+}
+void right_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
+{
+	int i1 = -1, i2 = -1;
 	for (int i = 0; i < H; ++i)
 		if (visited[i][W - 1] == 2)
 		{
@@ -209,7 +210,10 @@ void count_corners(Line &line, int visited[800][800], int H, int W, int lineW)
 	for (int i = 0; i < H; ++i)
 		if (visited[i][W - 1] == 2)
 			visited[i][W - 1] = 1;
+}
 
+void upper_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
+{
 	//UP
 	int j1 = -1, j2 = -1;
 	for (int j = 0; j < W; ++j)
@@ -237,9 +241,12 @@ void count_corners(Line &line, int visited[800][800], int H, int W, int lineW)
 	for (int j = 0; j < W; ++j)
 		if (visited[0][j] == 2)
 			visited[0][j] = 1;
+}
 
-	//DOWN
-	j1 = -1, j2 = -1;
+void lower_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
+{
+		//DOWN
+	int j1 = -1, j2 = -1;
 	for (int j = 0; j < W; ++j)
 		if (visited[H - 1][j] == 2)
 		{
@@ -267,6 +274,13 @@ void count_corners(Line &line, int visited[800][800], int H, int W, int lineW)
 	for (int j = 0; j < W; ++j)
 		if (visited[H - 1][j] == 2)
 			visited[H - 1][j] = 1;
+}
+void count_vertexes(Line &line, int visited[800][800], int H, int W, int lineW)
+{
+	right_side_count(line, visited, H, W, lineW);
+	left_side_count(line, visited, H, W, lineW);
+	upper_side_count(line, visited, H, W, lineW);
+	lower_side_count(line, visited, H, W, lineW);
 }
 
 void greenRegionsPosition(Image &img, Line &line)
@@ -329,20 +343,20 @@ int main()
 	{
 		bool silver_found = false;
 
-		int img_number = 0;
+		int img_number = 1;
 		while (camera_opened && !silver_found)
 		{
 
 			log.start_clock();
 
 			//IMAGE PROCESSING
-			camera.fillFrame(img.getImage(), ++img_number);
+			camera.fillFrame(img.passImage(), img_number++);
 			line.clear();
 			outline_line(img, line);
 			outline_green_regions(img, line);
-			count_corners(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
+			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-			//	rig.make_rig(line.pixels_list, line.num_nodes);
+			//	rig.make_rig(line.pixels_list);
 
 			//CALCULATING ERROR
 			//... aggiungere tutta la roba, prende rig in input
@@ -350,7 +364,7 @@ int main()
 			log.stop_clock();
 
 			//DEMO-DBG
-			graphics.draw(img.getImage());
+			graphics.draw(img.passImage());
 			cv::waitKey(0);
 			cv::Mat processed_frame = img.copy();
 			graphics.outline(processed_frame, img.visited, img.green_regions);
