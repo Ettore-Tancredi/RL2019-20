@@ -14,7 +14,7 @@ struct BGR
 };
 
 
-enum
+enum 
 {
     WHITE_G = 0,
     BLACK_G,

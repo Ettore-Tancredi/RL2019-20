@@ -22,12 +22,15 @@ void Line::clear()
             greenPos[i][j] = false;
 
     pixels_list.clear();
+    vertexes.clear();
 }
 
 void Line::show_data()
 {
     std::cout << "Number of line pixels:  " << pixels_list.size() << std::endl;
-    std::cout << "Number of vertixes:    " << num_corners << std::endl;
+    std::cout << "Number of vertexes:    " << vertexes.size() << std::endl;
+    //for (auto i: vertexes)
+      //  std::cout << "(" << i.first << ", " << i.second << ")" << std::endl;
 
     std::cout << "Green regions location: \n";
     int num_G_regions = 0;

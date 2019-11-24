@@ -12,7 +12,7 @@
 //GLOBAL CONSTANTS
 const int IMG_HEIGHT = 400;
 const int IMG_WIDTH = 400;
-const int AVERAGE_LINE_WIDTH = 20;
+const int AVERAGE_LINE_WIDTH = 70;
 const int NUM_RIG_POINTS = 10;
 
 int color_set[256][256][256];
@@ -151,10 +151,17 @@ void outline_green_regions(Image &img, Line &line)
 	}
 }
 
+void dbg(coord_vector &temp)
+{
+	coord comp = {-1, 399};
+	if (temp.size() > 0)
+		if (temp.back() == comp)
+			std::cout << "TROVATO GRAN FIGLIO";
+}
 
 void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 {
-		//LEFT
+	//LEFT
 	int i1 = -1, i2 = -1;
 	for (int i = 0; i < H; ++i)
 		if (visited[i][0] == 2)
@@ -171,12 +178,29 @@ void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 			break;
 		}
 
-	if (i2 > 0 && i1 > 0 && i2 - i1 > lineW)
+	if (i2 > 0 && i1 > 0)
 	{
-		line.num_corners += 2;
+		if (i2 - i1 > lineW)
+		{
+			line.vertexes.push_back(coord(i1, 0));
+			line.vertexes.push_back(coord(i2, 0));
+		}
+		else
+		{
+			if (std::max(i2, i1) <= H / 2)
+			{
+				line.vertexes.push_back(coord(std::max(i2, i1), 0));
+				visited[std::min(i2, i1)][0] = 1;
+			}
+			else
+			{
+				line.vertexes.push_back(coord(std::min(i2, i1), 0));
+				visited[std::max(i2, i1)][0] = 1;
+			}
+		}
 	}
 	else if (i2 > 0 || i1 > 0)
-		++line.num_corners;	
+		line.vertexes.push_back(coord(std::max(i2, i1), 0));
 
 	for (int i = 0; i < H; ++i)
 		if (visited[i][0] == 2)
@@ -200,12 +224,29 @@ void right_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 			break;
 		}
 
-	if (i2 > 0 && i1 > 0 && i2 - i1 > lineW)
+	if (i2 > 0 && i1 > 0)
 	{
-		line.num_corners += 2;
+		if (i2 - i1 > lineW)
+		{
+			line.vertexes.push_back(coord(i1, W - 1));
+			line.vertexes.push_back(coord(i2, W - 1));
+		}
+		else
+		{
+			if (std::max(i2, i1) <= H / 2)
+			{
+				line.vertexes.push_back(coord(std::max(i2, i1), W - 1));
+				visited[std::min(i2, i1)][W - 1] = 1;
+			}
+			else
+			{
+				line.vertexes.push_back(coord(std::min(i2, i1), W - 1));
+				visited[std::max(i2, i1)][W - 1] = 1;
+			}
+		}
 	}
 	else if (i2 > 0 || i1 > 0)
-		++line.num_corners;
+		line.vertexes.push_back(coord(std::max(i2, i1), W - 1));
 
 	for (int i = 0; i < H; ++i)
 		if (visited[i][W - 1] == 2)
@@ -231,12 +272,29 @@ void upper_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 			break;
 		}
 
-	if (j2 > 0 && j1 > 0 && j2 - j1 > lineW)
+	if (j2 > 0 && j1 > 0)
 	{
-		line.num_corners += 2;
+		if (j2 - j1 > lineW)
+		{
+			line.vertexes.push_back(coord(0, j1));
+			line.vertexes.push_back(coord(0, j2));
+		}
+		else
+		{
+			if (std::max(j2, j1) <= W / 2)
+			{
+				line.vertexes.push_back(coord(0, std::max(j2, j1)));
+				visited[0][std::min(j2, j1)] = 1;
+			}
+			else
+			{
+				line.vertexes.push_back(coord(0, std::min(j2, j1)));
+				visited[0][std::max(j2, j1)] = 1;
+			}
+		}
 	}
 	else if (j2 > 0 || j1 > 0)
-		++line.num_corners;
+		line.vertexes.push_back(coord(0, std::max(j2, j1)));
 
 	for (int j = 0; j < W; ++j)
 		if (visited[0][j] == 2)
@@ -245,7 +303,7 @@ void upper_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 
 void lower_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 {
-		//DOWN
+	//DOWN
 	int j1 = -1, j2 = -1;
 	for (int j = 0; j < W; ++j)
 		if (visited[H - 1][j] == 2)
@@ -262,14 +320,29 @@ void lower_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 			break;
 		}
 
-	if (j2 > 0 && j1 > 0 && j2 - j1 > lineW)
+	if (j2 > 0 && j1 > 0)
 	{
-		line.num_corners += 2;
+		if (j2 - j1 > lineW)
+		{
+			line.vertexes.push_back(coord(H - 1, j1));
+			line.vertexes.push_back(coord(H - 1, j2));
+		}
+		else
+		{
+			if (std::max(j2, j1) <= W / 2)
+			{
+				line.vertexes.push_back(coord(H - 1, std::max(j2, j1)));
+				visited[H - 1][std::min(j2, j1)] = 1;
+			}
+			else
+			{
+				line.vertexes.push_back(coord(H - 1, std::min(j2, j1)));
+				visited[H - 1][std::max(j2, j1)] = 1;
+			}
+		}
 	}
 	else if (j2 > 0 || j1 > 0)
-	{
-		++line.num_corners;
-	}
+		line.vertexes.push_back(coord(H - 1, std::max(j2, j1)));
 
 	for (int j = 0; j < W; ++j)
 		if (visited[H - 1][j] == 2)
