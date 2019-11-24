@@ -19,12 +19,13 @@ class Line
         
         std::pair<int, int> barycentre;
         int num_nodes;
-        int num_corners;
+        
         bool greenPos[2][2];
 
         coord_vector pixels_list;
         coord_vector vertexes;
 
+        int num_vertexes();
         void show_data(); //DBG func
 };
 
