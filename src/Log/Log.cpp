@@ -40,11 +40,7 @@ std::string dbg(int i)
 void Log::save()
 {
     for (int i = 0; i < execution_time.size(); ++i)
-    {
-        log_file << i+1 << " " << execution_time[i].count()<< dbg(i+1) << "\n";
-    }
-        
-
+        log_file << i+1 << " " << execution_time[i].count() /*<< dbg(i+1)*/ << "\n";        
 
     log_file.close();
 }

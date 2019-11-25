@@ -145,7 +145,7 @@ void outline_green_regions(Image &img, Line &line)
 			}
 			barycentre.first = int(barycentre.first / num_green_pixels);
 			barycentre.second = int(barycentre.second / num_green_pixels);
-			if (num_green_pixels > 50) 
+			if (num_green_pixels > 50)
 				img.green_regions.push_back(coord(barycentre.first, barycentre.second));
 		}
 	}
@@ -406,10 +406,10 @@ int main()
 		std::cout << "Camera unavailable" << std::endl;
 	else
 	{
-		bool silver_found = false;           
+		bool silver_found = false;
 
-		int img_number = 0;					//->for debugging purposes 
-		while (camera_opened && !silver_found && img_number < 86)
+		int img_number = 0; //->for debugging purposes
+		while (camera_opened && !silver_found && img_number < 87)
 		{
 
 			log.start_clock();
@@ -421,7 +421,7 @@ int main()
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-			
+
 			//considerare prima quanti sono e come sono allineati, se la situazione è di linea semplice, allora
 			//rig.make_rig(line);
 
