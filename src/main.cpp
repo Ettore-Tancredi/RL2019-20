@@ -124,7 +124,7 @@ void outline_green_regions(Image &img, Line &line)
 				int i = stack.top().first;
 				int j = stack.top().second;
 
-				if (img.visited[i][j] == 4) //green pixel has already been explored
+				if (img.visited[i][j] == 4)
 					stack.pop();
 				else
 				{
@@ -145,7 +145,7 @@ void outline_green_regions(Image &img, Line &line)
 			}
 			barycentre.first = int(barycentre.first / num_green_pixels);
 			barycentre.second = int(barycentre.second / num_green_pixels);
-			if (num_green_pixels > 50) //min dim of green region border (randomly chosen)	--> sostituire numero magico con costante definita in alto
+			if (num_green_pixels > 50) 
 				img.green_regions.push_back(coord(barycentre.first, barycentre.second));
 		}
 	}
@@ -406,16 +406,16 @@ int main()
 		std::cout << "Camera unavailable" << std::endl;
 	else
 	{
-		bool silver_found = false;
+		bool silver_found = false;           
 
-		int img_number = 1;
-		while (camera_opened && !silver_found)
+		int img_number = 0;					//->for debugging purposes 
+		while (camera_opened && !silver_found && img_number < 86)
 		{
 
 			log.start_clock();
 
 			//IMAGE PROCESSING
-			camera.fillFrame(img.passImage(), img_number++);
+			camera.fillFrame(img.passImage(), ++img_number);
 			line.clear();
 			outline_line(img, line);
 			outline_green_regions(img, line);
@@ -423,7 +423,7 @@ int main()
 			greenRegionsPosition(img, line);
 			
 			//considerare prima quanti sono e come sono allineati, se la situazione è di linea semplice, allora
-			rig.make_rig(line);
+			//rig.make_rig(line);
 
 			//CALCULATING ERROR
 			//... aggiungere tutta la roba, prende rig in input
@@ -443,7 +443,7 @@ int main()
 			line.show_data();
 			cv::waitKey(0);
 		}
-		log.save(); //notato che per alcune ci mette inspiegabilmente il doppio ad analizzare, vedere qual' è la parte che rallenta, magari prendendo il tempo in più istanti.
+		log.save();
 	}
 
 	return 0;
