@@ -7,7 +7,6 @@ Line::Line()
 
 void Line::clear()
 {
-    num_nodes = 0;
     barycentre.first = 0;
     barycentre.second = 0;
     for (int i = 0; i < 2; ++i)
@@ -22,6 +21,23 @@ int Line::num_vertexes()
 {
     return vertexes.size();
 }
+
+void Line::add_vertex(coord new_vertex)
+{
+    vertexes.push_back(new_vertex);
+}
+
+int Line::num_pixels()
+{
+    return pixels_list.size();
+}
+
+void Line::add_px(coord new_pixel)
+{
+    pixels_list.push_back(new_pixel);
+}
+
+
 
 void Line::show_data()
 {

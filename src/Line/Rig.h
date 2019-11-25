@@ -9,6 +9,8 @@
 #include <limits>
 #include <cmath>
 
+#include "Line.h"
+
 using coord = std::pair<int, int>;
 using coord_vector = std::vector<coord>;
 
@@ -21,7 +23,7 @@ class Rig
         coord_vector left_points;
         coord_vector right_points;
         coord_vector center_points;
-        void make_rig(coord_vector&, coord_vector&, int);
+        void make_rig(Line&);
     
 };
 

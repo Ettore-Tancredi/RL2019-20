@@ -57,7 +57,7 @@ void outline_line(Image &img, Line &line)
 
 						line.barycentre.first += i;
 						line.barycentre.second += j;
-						line.pixels_list.push_back(coord(i, j));
+						line.add_px(coord(i, j));
 
 						img.visited[i][j] = 1;
 						if (img.matchesTarget(i, j) == CORNER_PIXEL)
@@ -145,18 +145,10 @@ void outline_green_regions(Image &img, Line &line)
 			}
 			barycentre.first = int(barycentre.first / num_green_pixels);
 			barycentre.second = int(barycentre.second / num_green_pixels);
-			if (num_green_pixels > 50) //min dim of green region border (randomly chosen)
+			if (num_green_pixels > 50) //min dim of green region border (randomly chosen)	--> sostituire numero magico con costante definita in alto
 				img.green_regions.push_back(coord(barycentre.first, barycentre.second));
 		}
 	}
-}
-
-void dbg(coord_vector &temp)
-{
-	coord comp = {-1, 399};
-	if (temp.size() > 0)
-		if (temp.back() == comp)
-			std::cout << "TROVATO GRAN FIGLIO";
 }
 
 void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
@@ -182,25 +174,25 @@ void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 	{
 		if (i2 - i1 > lineW)
 		{
-			line.vertexes.push_back(coord(i1, 0));
-			line.vertexes.push_back(coord(i2, 0));
+			line.add_vertex(coord(i1, 0));
+			line.add_vertex(coord(i2, 0));
 		}
 		else
 		{
 			if (std::max(i2, i1) <= H / 2)
 			{
-				line.vertexes.push_back(coord(std::max(i2, i1), 0));
+				line.add_vertex(coord(std::max(i2, i1), 0));
 				visited[std::min(i2, i1)][0] = 1;
 			}
 			else
 			{
-				line.vertexes.push_back(coord(std::min(i2, i1), 0));
+				line.add_vertex(coord(std::min(i2, i1), 0));
 				visited[std::max(i2, i1)][0] = 1;
 			}
 		}
 	}
 	else if (i2 > 0 || i1 > 0)
-		line.vertexes.push_back(coord(std::max(i2, i1), 0));
+		line.add_vertex(coord(std::max(i2, i1), 0));
 
 	for (int i = 0; i < H; ++i)
 		if (visited[i][0] == 2)
@@ -228,25 +220,25 @@ void right_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 	{
 		if (i2 - i1 > lineW)
 		{
-			line.vertexes.push_back(coord(i1, W - 1));
-			line.vertexes.push_back(coord(i2, W - 1));
+			line.add_vertex(coord(i1, W - 1));
+			line.add_vertex(coord(i2, W - 1));
 		}
 		else
 		{
 			if (std::max(i2, i1) <= H / 2)
 			{
-				line.vertexes.push_back(coord(std::max(i2, i1), W - 1));
+				line.add_vertex(coord(std::max(i2, i1), W - 1));
 				visited[std::min(i2, i1)][W - 1] = 1;
 			}
 			else
 			{
-				line.vertexes.push_back(coord(std::min(i2, i1), W - 1));
+				line.add_vertex(coord(std::min(i2, i1), W - 1));
 				visited[std::max(i2, i1)][W - 1] = 1;
 			}
 		}
 	}
 	else if (i2 > 0 || i1 > 0)
-		line.vertexes.push_back(coord(std::max(i2, i1), W - 1));
+		line.add_vertex(coord(std::max(i2, i1), W - 1));
 
 	for (int i = 0; i < H; ++i)
 		if (visited[i][W - 1] == 2)
@@ -276,25 +268,25 @@ void upper_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 	{
 		if (j2 - j1 > lineW)
 		{
-			line.vertexes.push_back(coord(0, j1));
-			line.vertexes.push_back(coord(0, j2));
+			line.add_vertex(coord(0, j1));
+			line.add_vertex(coord(0, j2));
 		}
 		else
 		{
 			if (std::max(j2, j1) <= W / 2)
 			{
-				line.vertexes.push_back(coord(0, std::max(j2, j1)));
+				line.add_vertex(coord(0, std::max(j2, j1)));
 				visited[0][std::min(j2, j1)] = 1;
 			}
 			else
 			{
-				line.vertexes.push_back(coord(0, std::min(j2, j1)));
+				line.add_vertex(coord(0, std::min(j2, j1)));
 				visited[0][std::max(j2, j1)] = 1;
 			}
 		}
 	}
 	else if (j2 > 0 || j1 > 0)
-		line.vertexes.push_back(coord(0, std::max(j2, j1)));
+		line.add_vertex(coord(0, std::max(j2, j1)));
 
 	for (int j = 0; j < W; ++j)
 		if (visited[0][j] == 2)
@@ -324,25 +316,25 @@ void lower_side_count(Line &line, int visited[800][800], int H, int W, int lineW
 	{
 		if (j2 - j1 > lineW)
 		{
-			line.vertexes.push_back(coord(H - 1, j1));
-			line.vertexes.push_back(coord(H - 1, j2));
+			line.add_vertex(coord(H - 1, j1));
+			line.add_vertex(coord(H - 1, j2));
 		}
 		else
 		{
 			if (std::max(j2, j1) <= W / 2)
 			{
-				line.vertexes.push_back(coord(H - 1, std::max(j2, j1)));
+				line.add_vertex(coord(H - 1, std::max(j2, j1)));
 				visited[H - 1][std::min(j2, j1)] = 1;
 			}
 			else
 			{
-				line.vertexes.push_back(coord(H - 1, std::min(j2, j1)));
+				line.add_vertex(coord(H - 1, std::min(j2, j1)));
 				visited[H - 1][std::max(j2, j1)] = 1;
 			}
 		}
 	}
 	else if (j2 > 0 || j1 > 0)
-		line.vertexes.push_back(coord(H - 1, std::max(j2, j1)));
+		line.add_vertex(coord(H - 1, std::max(j2, j1)));
 
 	for (int j = 0; j < W; ++j)
 		if (visited[H - 1][j] == 2)
@@ -429,7 +421,9 @@ int main()
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-			//	rig.make_rig(line.pixels_list);
+			
+			//considerare prima quanti sono e come sono allineati, se la situazione è di linea semplice, allora
+			rig.make_rig(line);
 
 			//CALCULATING ERROR
 			//... aggiungere tutta la roba, prende rig in input

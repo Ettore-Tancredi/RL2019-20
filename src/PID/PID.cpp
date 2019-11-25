@@ -8,11 +8,12 @@ PID::PID()
   E = 0;
   I = 0;
 
-  for (int i = 0; i < 6; ++i)
+  weights.resize(10);
+  for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 }
 
-PID::PID(double p, double i, double d)
+PID::PID(double p, double i, double d, int num_points)
 {
   Kp = p;
   Ki = i;
@@ -20,24 +21,24 @@ PID::PID(double p, double i, double d)
   E = 0;
   I = 0;
 
-  for (int i = 0; i < 6; ++i)
+  for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 
 }
 
 int PID::w(int n)
 {
-    return 6 - n;
+    return weights.size() - n;
 }
 
 
-int PID::pid(int *slopes)
+int PID::pid(std::vector<double> slopes)
 {
   double E_prec=E;
   E = 0;
 
   int p = 0;
-  for (int i = 0; i < 6; ++i)
+  for (int i = 0; i < slopes.size(); ++i)
   {
       E += weights[i]*slopes[i];
       p += weights[i];

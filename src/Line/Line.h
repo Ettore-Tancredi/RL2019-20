@@ -11,22 +11,24 @@
 
 class Line
 {
-    private:
+private:
+    coord_vector pixels_list;
+    coord_vector vertexes;
 
-    public:
-        Line();
-        void clear();
-        
-        std::pair<int, int> barycentre;
-        int num_nodes;
-        
-        bool greenPos[2][2];
+public:
+    Line();
+    void clear();
 
-        coord_vector pixels_list;
-        coord_vector vertexes;
+    std::pair<int, int> barycentre;
+    bool greenPos[2][2];
 
-        int num_vertexes();
-        void show_data(); //DBG func
+    int num_pixels();
+    void add_px(coord);
+
+    int num_vertexes();
+    void add_vertex(coord);
+    
+    void show_data(); //DBG func
 };
 
-#endif 
+#endif
