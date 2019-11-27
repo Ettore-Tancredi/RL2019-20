@@ -3,6 +3,9 @@
 
 #include "Line.h"
 #include "cv_types.h"
+#include <vector>
+#include <utility>
+#include <limits>
 
 void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW)
 {
@@ -199,6 +202,46 @@ void count_vertexes(Line &line, int visited[800][800], int H, int W, int lineW)
 	left_side_count(line, visited, H, W, lineW);
 	upper_side_count(line, visited, H, W, lineW);
 	lower_side_count(line, visited, H, W, lineW);
+}
+
+double euclidean_distance(coord p1, coord p2)
+{
+	double i = p1.first - p2.first;
+	double j = p1.second - p2.second;
+
+	return sqrt(i * i + j * j);
+}
+
+std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes)  // the parameter is only a copy of the original vector, so we can adopt a destructive algorithm
+{
+	if (vertexes.size() % 2 != 0)
+		std::cout << "The number of vertexes is odd.\n";    // useful for debugging
+
+	double distance, temp_dist;
+	int j;
+	std::vector< pair<coord, coord> > paired_vertexes;
+
+	while (!vertexes.empty())
+	{
+		distance = std::numeric_limits<double>::max();
+		j = 0;
+		for (int i = 1; i < vertexes.size(); ++i)
+		{
+			temp_dist = euclidean_distance(vertexes[0], vertexes[i]);
+			if (temp_dist < distance)
+			{
+				j = i;
+				distance = temp_dist;
+			}
+		}
+
+		paired_vertexes.push_back({ vertexes[0], vertexes[j] });
+		vertexes.erase(vertexes.begin() + j);
+		vertexes.erase(vertexes.begin() + 0);
+	}
+
+	return paired_vertexes;
+
 }
 
 #endif
