@@ -14,6 +14,8 @@
 const int IMG_HEIGHT = 400;
 const int IMG_WIDTH = 400;
 const int AVERAGE_LINE_WIDTH = 70;
+const int MIN_GREEN_REGION_NODES = 50;
+
 const int NUM_RIG_POINTS = 10;
 
 const int KP = 10;
@@ -151,7 +153,7 @@ void outline_green_regions(Image &img, Line &line)
 			}
 			barycentre.first = int(barycentre.first / num_green_pixels);
 			barycentre.second = int(barycentre.second / num_green_pixels);
-			if (num_green_pixels > 50)
+			if (num_green_pixels > MIN_GREEN_REGION_NODES)
 				img.green_regions.push_back(coord(barycentre.first, barycentre.second));
 		}
 	}
