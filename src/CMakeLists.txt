@@ -4,8 +4,8 @@ project( main )
 find_package( OpenCV REQUIRED )
 
 
-include_directories(Line graphics camera Image Log Lib ${OpenCV_INCLUDE_DIRS} )
-set(SOURCES Image/Image.cpp Graphics/Graphics.cpp Camera/Camera.cpp Line/Line.cpp Line/Rig.cpp Log/Log.cpp main.cpp Lib/cv_types.h)
+include_directories(Line graphics camera Image Log Lib Controller ${OpenCV_INCLUDE_DIRS} )
+set(SOURCES Image/Image.cpp Graphics/Graphics.cpp Camera/Camera.cpp Line/Line.cpp Line/Rig.cpp Log/Log.cpp main.cpp Lib/cv_types.h Controller/Controller.cpp)
 
 
 

@@ -7,6 +7,7 @@
 #include "Graphics/Graphics.h"
 #include "Line/Line.h"
 #include "Line/Rig.h"
+#include "Controller/Controller.h"
 #include "Log/Log.h"
 
 //GLOBAL CONSTANTS
@@ -14,6 +15,11 @@ const int IMG_HEIGHT = 400;
 const int IMG_WIDTH = 400;
 const int AVERAGE_LINE_WIDTH = 70;
 const int NUM_RIG_POINTS = 10;
+
+const int KP = 10;
+const int KD = 10;
+const int KI = 10;
+
 
 int color_set[256][256][256];
 
@@ -394,6 +400,7 @@ int main()
 	Image img(IMG_HEIGHT, IMG_WIDTH);
 	Line line;
 	Rig rig(NUM_RIG_POINTS);
+	Controller controller(KP, KI, KD, NUM_RIG_POINTS, IMG_WIDTH, IMG_HEIGHT);
 	Log log("run_log.txt");
 
 	Graphics graphics("feed"); //ARG: window name

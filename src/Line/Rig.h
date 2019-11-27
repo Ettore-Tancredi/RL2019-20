@@ -10,9 +10,8 @@
 #include <cmath>
 
 #include "Line.h"
+#include "cv_types.h"
 
-using coord = std::pair<int, int>;
-using coord_vector = std::vector<coord>;
 
 class Rig 
 {
