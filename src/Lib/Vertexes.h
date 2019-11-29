@@ -3,6 +3,7 @@
 
 #include "Line.h"
 #include "cv_types.h"
+#include "Line_constants.h"
 #include <vector>
 #include <utility>
 #include <limits>
@@ -212,6 +213,7 @@ double euclidean_distance(coord p1, coord p2)
 	return sqrt(i * i + j * j);
 }
 
+
 std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes)  // the parameter is only a copy of the original vector, so we can adopt a destructive algorithm
 {
 	if (vertexes.size() % 2 != 0)
@@ -219,8 +221,9 @@ std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes)  // 
 
 	double distance, temp_dist;
 	int j;
-	std::vector< pair<coord, coord> > paired_vertexes;
+	std::vector< std::pair<coord, coord> > paired_vertexes;
 
+	//considerare che se ce ne sono due sullo stesso late, vanno appaiati
 	while (!vertexes.empty())
 	{
 		distance = std::numeric_limits<double>::max();
@@ -234,8 +237,14 @@ std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes)  // 
 				distance = temp_dist;
 			}
 		}
-
-		paired_vertexes.push_back({ vertexes[0], vertexes[j] });
+		if(distance < 3*AVERAGE_LINE_WIDTH)
+			paired_vertexes.push_back({ vertexes[0], vertexes[j] });
+		else
+		{
+			paired_vertexes.push_back({vertexes[0], {-1, -1}});
+			paired_vertexes.push_back({vertexes[j], {-1, -1}});
+		}
+		
 		vertexes.erase(vertexes.begin() + j);
 		vertexes.erase(vertexes.begin() + 0);
 	}
@@ -243,5 +252,116 @@ std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes)  // 
 	return paired_vertexes;
 
 }
+
+std::vector< std::pair<coord, coord> > pair_vertexes(coord_vector vertexes, int H, int W)
+{
+	std::vector< std::pair<coord, coord> > paired_vertexes;
+	//we check for vertexes laying on the same side
+
+	std::vector<coord> temp;
+	std::vector<int> idx;
+
+	//top of the image (0, x)
+	
+	for(int i = 0; i < vertexes.size(); ++i)
+	{
+		if(vertexes[i].first == 0)
+		{
+			temp.push_back(vertexes[i]);
+			idx.push_back(i);
+		}
+	} 
+	if(temp.size() > 2)
+		std::cout << "More than two vertexes for side!!!" << std::endl;
+	else
+	{
+		if(euclidean_distance(temp[0], temp[1]) > AVERAGE_LINE_WIDTH - 30 && euclidean_distance(temp[0], temp[1]) < AVERAGE_LINE_WIDTH + 30)
+		{
+			paired_vertexes.push_back({temp[0], temp[1]});
+			vertexes.erase(vertexes.begin() + idx[1]);
+			vertexes.erase(vertexes.begin() + idx[0]);
+		}
+	}
+	temp.clear();
+	idx.clear();
+
+	//bottom of the image (H - 1, x)
+
+	for(int i = 0; i < vertexes.size(); ++i)
+	{
+		if(vertexes[i].first == H - 1)
+		{
+			temp.push_back(vertexes[i]);
+			idx.push_back(i);
+		}
+	} 
+	if(temp.size() > 2)
+		std::cout << "More than two vertexes for side!!!" << std::endl;
+	else
+	{
+		if(euclidean_distance(temp[0], temp[1]) > AVERAGE_LINE_WIDTH - 30 && euclidean_distance(temp[0], temp[1]) < AVERAGE_LINE_WIDTH + 30)
+		{
+			paired_vertexes.push_back({temp[0], temp[1]});
+			vertexes.erase(vertexes.begin() + idx[1]);
+			vertexes.erase(vertexes.begin() + idx[0]);
+		}
+	}
+	temp.clear();
+	idx.clear();
+
+	//left side of the image (y, 0)
+
+	for(int i = 0; i < vertexes.size(); ++i)
+	{
+		if(vertexes[i].second == 0)
+		{
+			temp.push_back(vertexes[i]);
+			idx.push_back(i);
+		}
+	} 
+	if(temp.size() > 2)
+		std::cout << "More than two vertexes for side!!!" << std::endl;
+	else
+	{
+		if(euclidean_distance(temp[0], temp[1]) > AVERAGE_LINE_WIDTH - 30 && euclidean_distance(temp[0], temp[1]) < AVERAGE_LINE_WIDTH + 30)
+		{
+			paired_vertexes.push_back({temp[0], temp[1]});
+			vertexes.erase(vertexes.begin() + idx[1]);
+			vertexes.erase(vertexes.begin() + idx[0]);
+		}
+	}
+	temp.clear();
+	idx.clear();
+
+	//right side of the image (y, W - 1)
+
+	for(int i = 0; i < vertexes.size(); ++i)
+	{
+		if(vertexes[i].second == W - 1)
+		{
+			temp.push_back(vertexes[i]);
+			idx.push_back(i);
+		}
+	} 
+	if(temp.size() > 2)
+		std::cout << "More than two vertexes for side!!!" << std::endl;
+	else
+	{
+		if(euclidean_distance(temp[0], temp[1]) > AVERAGE_LINE_WIDTH - 30 && euclidean_distance(temp[0], temp[1]) < AVERAGE_LINE_WIDTH + 30)
+		{
+			paired_vertexes.push_back({temp[0], temp[1]});
+			vertexes.erase(vertexes.begin() + idx[1]);
+			vertexes.erase(vertexes.begin() + idx[0]);
+		}
+	}
+	temp.clear();
+	idx.clear();
+
+
+	//checking for non-paired vertexes which are at a right euclidean distance
+	
+
+}
+
 
 #endif

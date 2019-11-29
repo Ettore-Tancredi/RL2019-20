@@ -27,6 +27,7 @@ public:
 
     int num_vertexes();
     void add_vertex(coord);
+    coord_vector getVertexes();
     
     void show_data(); //DBG func
 };

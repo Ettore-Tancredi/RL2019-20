@@ -1,3 +1,6 @@
+#ifndef CV_TYPES
+#define CV_TYPES
+
 #include <utility>
 #include <iostream>
 #include <stack>
@@ -6,8 +9,6 @@
 #include <vector>
 #include <cmath>
 
-#ifndef DATA_TYPES
-#define DATA_TYPES
 
 using coord = std::pair<int, int>;
 using coord_vector = std::vector<coord>;

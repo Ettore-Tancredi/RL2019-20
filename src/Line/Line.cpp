@@ -27,6 +27,12 @@ void Line::add_vertex(coord new_vertex)
     vertexes.push_back(new_vertex);
 }
 
+coord_vector Line::getVertexes()
+{
+    return vertexes;
+}
+
+
 int Line::num_pixels()
 {
     return pixels_list.size();

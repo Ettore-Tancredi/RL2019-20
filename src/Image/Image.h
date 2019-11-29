@@ -1,3 +1,6 @@
+#ifndef IMAGE_H
+#define IMAGE_H
+
 #include <vector>
 #include <iostream> //debug purposes
 #include <string>
@@ -6,10 +9,6 @@
 #include <opencv2/opencv.hpp>  
 
 #include "cv_types.h"
-
-#ifndef IMAGE_H
-#define IMAGE_H
-
 
 const int MAX_DIM = 800;
 

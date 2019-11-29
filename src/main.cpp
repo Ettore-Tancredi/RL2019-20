@@ -18,6 +18,7 @@ int color_set[256][256][256];
 
 int main()
 {
+
 	Image img(IMG_HEIGHT, IMG_WIDTH);
 	Line line;
 	Rig rig(NUM_RIG_POINTS);
@@ -36,7 +37,7 @@ int main()
 	{
 		bool silver_found = false;
 
-		int img_number = 0; //->for debugging purposes
+		int img_number = 16; //->for debugging purposes
 		while (camera_opened && !silver_found && img_number < 87)
 		{
 
@@ -49,8 +50,7 @@ int main()
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-
-			//considerare prima quanti sono e come sono allineati, se la situazione è di linea semplice, allora
+			std::vector< std::pair<coord, coord> > paired_vertexes = pair_vertexes(line.getVertexes(), img.height(), img.width());			//considerare prima quanti sono e come sono allineati, se la situazione è di linea semplice, allora
 			//rig.make_rig(line);
 
 			//CALCULATING ERROR
@@ -65,9 +65,12 @@ int main()
 			graphics.outline(processed_frame, img.visited, img.green_regions);
 			//graphics.surface(processed_frame, img.visited, img);
 			//	graphics.apply_rig(processed_frame, rig);
+			graphics.make_hull(paired_vertexes, processed_frame);
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
+			for (auto i: paired_vertexes)
+				std::cout << "("<< i.first.first << ", " << i.first.second << ")   (" << i.second.first << ", " << i.second.second << ")\n";
 			line.show_data();
 			cv::waitKey(0);
 		}
