@@ -28,7 +28,7 @@ void Camera::fillFrame(cv::Mat &frame, int img_number)
 {
     // bool b = cap.read(frame);
     // if (!b)
-    //     std::cout << "Unable to take photo" << std::endl;
+    //     throw "Unable to take photo";
     // SAVE AS img_number.png
 
     bool b = true;

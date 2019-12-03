@@ -37,6 +37,12 @@ std::string dbg(int i)
         return " s";
 }
 
+
+void Log::write(std::string text)
+{
+    log_file << text << "\n";
+}
+
 void Log::save()
 {
     for (int i = 0; i < execution_time.size(); ++i)

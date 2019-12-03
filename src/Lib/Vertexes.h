@@ -226,7 +226,6 @@ double euclidean_distance(coord p1, coord p2)
 {
 	double i = p1.first - p2.first;
 	double j = p1.second - p2.second;
-	std::cout << "(" << p1.first << ", " << p1.second << ") " << "(" << p2.first << ", " << p2.second  << ") " << sqrt(i * i + j * j)<<std::endl;
 	return sqrt(i * i + j * j);
 }
 
@@ -258,7 +257,7 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 		}
 	}
 	if (temp.size() > 2)
-		std::cout << "More than two vertexes for side!!!" << std::endl;
+		throw "More than two vertexes for side";
 	else if (temp.size() == 2)
 	{
 		//mettere errore %
@@ -283,7 +282,7 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 		}
 	}
 	if (temp.size() > 2)
-		std::cout << "More than two vertexes for side!!!" << std::endl;
+		throw "More than two vertexes for side";
 	else if (temp.size() == 2)
 	{
 		if (comp(euclidean_distance(temp[0], temp[1]), AVERAGE_LINE_WIDTH, error))
@@ -307,7 +306,7 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 		}
 	}
 	if (temp.size() > 2)
-		std::cout << "More than two vertexes for side!!!" << std::endl;
+		throw "More than two vertexes for side";
 	else if (temp.size() == 2)
 	{
 		if (comp(euclidean_distance(temp[0], temp[1]), AVERAGE_LINE_WIDTH, error))
@@ -331,7 +330,7 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 		}
 	}
 	if (temp.size() > 2)
-		std::cout << "More than two vertexes for side!!!" << std::endl;
+		throw "More than two vertexes for side";
 	else if (temp.size() == 2)
 	{
 		if (comp(euclidean_distance(temp[0], temp[1]), AVERAGE_LINE_WIDTH, error))
@@ -365,9 +364,8 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 		}
 
 	if (c != vertexes.size() / 2)
-		std::cout << "Ci sta nu problema all'abbinamento della coppie." << std::endl;
+		throw "presenza vertici spaiati";
 
-	std::cout << "PV: " << paired_vertexes.size() << std::endl;
 	return paired_vertexes;
 }
 

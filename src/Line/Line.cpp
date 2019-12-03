@@ -43,7 +43,15 @@ void Line::add_px(coord new_pixel)
     pixels_list.push_back(new_pixel);
 }
 
+void Line::setType(int new_type)
+{
+    type = new_type;
+}
 
+int Line::getType()
+{
+    return type;
+}
 
 void Line::show_data()
 {

@@ -25,6 +25,7 @@ class Log
         void start_clock();
         void stop_clock();
         void print_current_execution_time(); //DBG func
+        void write(std::string);
         void save();
 };
 

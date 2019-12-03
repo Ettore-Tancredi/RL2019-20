@@ -9,11 +9,23 @@
 
 #include "cv_types.h"
 
+enum LineType
+{
+    UNKNOWN = 0,
+    INTERRUPT,
+    STD_LINE,
+    T_INTERSECTION,
+    C_INTERSECTION
+};
+
+
 class Line
 {
 private:
     coord_vector pixels_list;
     coord_vector vertexes;
+
+    int type;
 
 public:
     Line();
@@ -28,6 +40,9 @@ public:
     int num_vertexes();
     void add_vertex(coord);
     coord_vector getVertexes();
+
+    void setType(int);
+    int getType();
     
     void show_data(); //DBG func
 };
