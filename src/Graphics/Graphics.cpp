@@ -157,7 +157,7 @@ void Graphics::surface(cv::Mat &img, int visited[800][800], Image &image)
     }
 }
 
-void Graphics::outline(cv::Mat &img, int visited[800][800], std::vector<std::pair<int, int>> &green)
+void Graphics::outline(cv::Mat &img, int visited[800][800], coord_vector &green)
 {
     const int H = img.rows;
     const int W = img.cols;
@@ -232,10 +232,9 @@ void Graphics::join_ends(cv::Mat &frame, coord a, coord b)
     cv::line(frame, cv::Point(a.second, a.first), cv::Point(b.second, b.first), cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
 }
 
-
 coord G_median(coord a, coord b)
 {
-	return coord((a.first+b.first)/2, (a.second + b.second)/2);
+    return coord((a.first + b.first) / 2, (a.second + b.second) / 2);
 }
 
 void Graphics::make_hull(std::vector<std::pair<coord, coord>> paired_vertexes, cv::Mat &frame)
@@ -260,7 +259,7 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
         int j = rig.center_points[k].second;
         cv::putText(img, std::to_string(k), cv::Point(j, i), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
         if (k < rig.num_points - 1)
-            join_ends(img, rig.center_points[k], rig.center_points[k+1]);
+            join_ends(img, rig.center_points[k], rig.center_points[k + 1]);
         for (int c = -1; c < 2; ++c)
             for (int t = -1; t < 2; ++t)
             {
@@ -271,5 +270,20 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
                     img.at<cv::Vec3b>(i + c, j + t).val[2] = COLORS[BLUE_G].R;
                 }
             }
+    }
+}
+
+void Graphics::apply_order(cv::Mat &img, coord_vector pixels_list)
+{
+    for (int k = 0; k < pixels_list.size(); ++k)
+    {
+        if (k % 40 == 0)
+        {
+            int i = pixels_list[k].first;
+            int j = pixels_list[k].second;
+            if (i == 0)
+                i += 10;
+            cv::putText(img, std::to_string(k), cv::Point(j, i), cv::FONT_HERSHEY_SIMPLEX, 0.25, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
+        }
     }
 }

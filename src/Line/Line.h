@@ -38,6 +38,7 @@ public:
     void add_px(coord);
     int find_px(coord);
     coord get_px(int);
+    coord_vector getPixelsList();
 
     int num_vertexes();
     void add_vertex(coord);

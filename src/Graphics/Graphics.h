@@ -36,11 +36,12 @@ public:
 
     void draw(cv::Mat &);
 
-    void outline(cv::Mat &, int[800][800], std::vector<std::pair<int, int>> &);
+    void outline(cv::Mat &, int[800][800], coord_vector &);
     void surface(cv::Mat &, int[800][800], Image &);
     void apply_rig(cv::Mat &, Rig);
     void join_ends(cv::Mat &, coord, coord);
     void make_hull(std::vector<std::pair<coord, coord>>, cv::Mat &);
+    void apply_order(cv::Mat &, coord_vector);
 };
 
 

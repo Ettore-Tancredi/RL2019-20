@@ -54,6 +54,12 @@ int Line::find_px(coord search)
 
 }
 
+coord_vector Line::getPixelsList()
+{
+    return pixels_list;
+}
+
+
 coord Line::get_px(int i)
 {
     return pixels_list[i];
