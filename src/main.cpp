@@ -11,6 +11,7 @@
 #include "Line/Rig.h"
 #include "Controller/Controller.h"
 #include "Log/Log.h"
+//#include "Lib/debugging.h"
 
 #include "Constants/Line_constants.h"
 
@@ -31,6 +32,7 @@ int main()
 
 	bool camera_opened = true;
 	Camera camera(camera_opened, 30, 400, 400);
+
 	if (!camera_opened)
 		std::cout << "Camera unavailable" << std::endl;
 	else
@@ -59,7 +61,7 @@ int main()
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-			std::vector<std::pair<coord, coord>> paired_vertexes;
+			coord_pair_vector paired_vertexes;
 			try
 			{
 				paired_vertexes = pair_vertexes(line.getVertexes(), img.height(), img.width());
@@ -76,7 +78,7 @@ int main()
 				break;
 			case 2:
 				line.setType(STD_LINE);
-				//rig.make_rig(line);
+				rig.make_rig(line, paired_vertexes);
 
 				//CALCULATING ERROR
 				//... aggiungere tutta la roba, prende rig in input
@@ -115,8 +117,10 @@ int main()
 			cv::Mat processed_frame = img.copy();
 			graphics.outline(processed_frame, img.visited, img.green_regions);
 			//graphics.surface(processed_frame, img.visited, img);
-			//graphics.apply_rig(processed_frame, rig);
-			graphics.make_hull(paired_vertexes, processed_frame);
+			if (lt == STD_LINE)
+				graphics.apply_rig(processed_frame, rig);
+			else
+				graphics.make_hull(paired_vertexes, processed_frame);
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();

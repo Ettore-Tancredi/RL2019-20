@@ -237,13 +237,13 @@ bool func(std::pair<std::pair<coord, coord>, double> a, std::pair<std::pair<coor
 		return false;
 }
 
-std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H, int W)
+coord_pair_vector pair_vertexes(coord_vector vertexes, int H, int W)
 {
 	double error = 1;
-	std::vector<std::pair<coord, coord>> paired_vertexes;
+	coord_pair_vector paired_vertexes;
 	//we check for vertexes laying on the same side
 
-	std::vector<coord> temp;
+	coord_vector temp;
 	std::vector<int> idx;
 
 	//top of the image (0, x)
@@ -347,7 +347,7 @@ std::vector<std::pair<coord, coord>> pair_vertexes(coord_vector vertexes, int H,
 
 	//generating all the possible pairs of vertexes with respective distance
 
-	std::vector<std::pair<std::pair<coord, coord>, double>> candidate_pairs;
+	std::vector<std::pair<coord_pair, double>> candidate_pairs;
 	for (int i = 0; i < vertexes.size(); ++i)
 		for (int j = i + 1; j < vertexes.size(); ++j)
 			candidate_pairs.push_back({{vertexes[i], vertexes[j]}, euclidean_distance(vertexes[i], vertexes[j])});

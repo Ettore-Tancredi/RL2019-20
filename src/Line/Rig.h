@@ -12,18 +12,16 @@
 #include "Line.h"
 #include "cv_types.h"
 
-
-class Rig 
+class Rig
 {
-    public:
-        Rig(int);
-
-        int num_points;
-        coord_vector left_points;
-        coord_vector right_points;
-        coord_vector center_points;
-        void make_rig(Line&);
+private:
     
+
+public:
+    Rig(int);
+    int num_points;
+    coord_vector center_points;
+    void make_rig(Line &, coord_pair_vector);
 };
 
 #endif

@@ -36,10 +36,14 @@ public:
 
     int num_pixels();
     void add_px(coord);
+    int find_px(coord);
+    coord get_px(int);
 
     int num_vertexes();
     void add_vertex(coord);
     coord_vector getVertexes();
+    
+
 
     void setType(int);
     int getType();

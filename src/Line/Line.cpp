@@ -43,6 +43,23 @@ void Line::add_px(coord new_pixel)
     pixels_list.push_back(new_pixel);
 }
 
+int Line::find_px(coord search)
+{
+    for (int i =0; i < pixels_list.size(); ++i)
+    {
+        if (search == pixels_list[i])
+            return i;
+        else 
+            return -1;
+    }
+
+}
+
+coord Line::get_px(int i)
+{
+    return pixels_list[i];
+}
+
 void Line::setType(int new_type)
 {
     type = new_type;
