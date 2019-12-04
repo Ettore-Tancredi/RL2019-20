@@ -11,7 +11,7 @@
 #include "Line/Rig.h"
 #include "Controller/Controller.h"
 #include "Log/Log.h"
-//#include "Lib/debugging.h"
+#include "Lib/debugging.h"
 
 #include "Constants/Line_constants.h"
 
@@ -79,7 +79,6 @@ int main()
 			case 2:
 				line.setType(STD_LINE);
 				rig.make_rig(line, paired_vertexes);
-
 				//CALCULATING ERROR
 				//... aggiungere tutta la roba, prende rig in input
 				break;
@@ -107,7 +106,6 @@ int main()
 				else
 					; //esegui correzione
 			}
-			
 
 			log.stop_clock();
 
@@ -118,7 +116,10 @@ int main()
 			graphics.outline(processed_frame, img.visited, img.green_regions);
 			//graphics.surface(processed_frame, img.visited, img);
 			if (lt == STD_LINE)
+			{
 				graphics.apply_rig(processed_frame, rig);
+			}
+
 			else
 				graphics.make_hull(paired_vertexes, processed_frame);
 			graphics.draw(processed_frame);

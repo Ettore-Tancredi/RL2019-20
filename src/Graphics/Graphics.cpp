@@ -229,7 +229,7 @@ void Graphics::outline(cv::Mat &img, int visited[800][800], std::vector<std::pai
 
 void Graphics::join_ends(cv::Mat &frame, coord a, coord b)
 {
-    cv::line(frame, cv::Point(a.second, a.first), cv::Point(b.second, b.first), (COLORS[WHITE_G].B, COLORS[WHITE_G].G, COLORS[WHITE_G].R));
+    cv::line(frame, cv::Point(a.second, a.first), cv::Point(b.second, b.first), cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
 }
 
 
@@ -258,8 +258,9 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
     {
         int i = rig.center_points[k].first;
         int j = rig.center_points[k].second;
-        cv::putText(img, std::to_string(k), cv::Point(j, i), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(51, 255, 0));
-
+        cv::putText(img, std::to_string(k), cv::Point(j, i), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
+        if (k < rig.num_points - 1)
+            join_ends(img, rig.center_points[k], rig.center_points[k+1]);
         for (int c = -1; c < 2; ++c)
             for (int t = -1; t < 2; ++t)
             {

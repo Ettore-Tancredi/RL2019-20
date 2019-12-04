@@ -1,6 +1,6 @@
 #include "Rig.h"
 
-#include "debugging.h"
+// #include "debugging.h"
 
 Rig::Rig(int points)
 {
@@ -40,6 +40,8 @@ void Rig::make_rig(Line &line, coord_pair_vector paired_vertexes)
     int pos1 = line.find_px(paired_vertexes[1].second);
     int pos2 = line.find_px(paired_vertexes[1].first);
     int pos3 = line.find_px(paired_vertexes[0].first);
+
+
     int right_side =  pos1 - pos0; 
     int left_side =  pos3 - pos2;
     int right_jump = right_side / num_points;
@@ -47,9 +49,8 @@ void Rig::make_rig(Line &line, coord_pair_vector paired_vertexes)
     for (int i = 0; i < num_points; ++i)
     {
         int right_i = pos0 + right_jump * i;
-        int left_i = pos2 + left_jump * i;
+        int left_i = pos3 - left_jump * i;
         coord avg = medium(line.get_px(right_i), line.get_px(left_i));
-        center_points.push_back(avg);
+        center_points[i] = avg;
     }
-
 }
