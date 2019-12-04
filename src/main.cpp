@@ -120,8 +120,6 @@ int main()
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
-			for (auto i : paired_vertexes)
-				std::cout << "(" << i.first.first << ", " << i.first.second << ")   (" << i.second.first << ", " << i.second.second << ")\n";
 			line.show_data();
 			cv::waitKey(0);
 		}
