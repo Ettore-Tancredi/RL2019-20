@@ -1,0 +1,9 @@
+cd Downloads
+tar -xJvf arduino-1.8.10-linux64.tar.xz arduino-1.8.10/
+mv arduino-1.8.10 ..
+cd ..
+cd arduino-1.8.10/
+sudo usermod -a -G dialout rescue
+sudo apt-get update 
+sudo apt-get -f dist-upgrade
+sudo apt install git
