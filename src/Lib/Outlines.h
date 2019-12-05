@@ -10,7 +10,6 @@ void outline_line(Image &img, Line &line)
 {
 	bool sides_touched[4] = {};
 
-	img.clear();
 	for (int i = 0; i < 4; ++i)
 		sides_touched[i] = false;
 
@@ -41,7 +40,7 @@ void outline_line(Image &img, Line &line)
 								{
 									int temp = img.matchesTarget(i + c, j + t);
 									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
-										stack.push(coord(i + c, j + t));
+										stack.push(coord(i + c, j + t)); //buttare in map, com chiave ++index
 								}
 
 						line.barycentre.first += i;

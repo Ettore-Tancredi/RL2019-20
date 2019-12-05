@@ -55,12 +55,15 @@ int main()
 				log.write(msg);
 				break;
 			}
-
+			
+			img.clear();
 			line.clear();
+
 			outline_line(img, line);
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
+			
 			coord_pair_vector paired_vertexes;
 			try
 			{
