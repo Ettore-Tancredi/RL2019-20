@@ -24,7 +24,7 @@ void outline_line(Image &img, Line &line)
 				//INIZIO DFS
 				std::stack<coord> stack;
 				stack.push(coord(img.height() - 1, x));
-
+				int index = 0;
 				while (!stack.empty())
 				{
 					int i = stack.top().first;
@@ -40,12 +40,16 @@ void outline_line(Image &img, Line &line)
 								{
 									int temp = img.matchesTarget(i + c, j + t);
 									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
+									{
 										stack.push(coord(i + c, j + t)); //buttare in map, com chiave ++index
+										line.new_px(coord(i + c, j + t), index);
+									}
+									
 								}
 
 						line.barycentre.first += i;
 						line.barycentre.second += j;
-						line.add_px(coord(i, j));
+						//line.add_px(coord(i, j));
 
 						img.visited[i][j] = 1;
 						if (img.matchesTarget(i, j) == CORNER_PIXEL)
@@ -55,6 +59,8 @@ void outline_line(Image &img, Line &line)
 			}
 		}
 	}
+
+	line.sort_pixels();
 
 	for (int j = 0; j < img.width(); ++j)
 	{
@@ -179,6 +185,5 @@ void greenRegionsPosition(Image &img, Line &line)
 		line.greenPos[v_idx][o_idx] = true;
 	}
 }
-
 
 #endif

@@ -18,11 +18,12 @@ enum LineType
     C_INTERSECTION
 };
 
-
 class Line
 {
 private:
     coord_vector pixels_list;
+    std::map<coord, int> pixels_map;
+
     coord_vector vertexes;
 
     int type;
@@ -40,15 +41,16 @@ public:
     coord get_px(int);
     coord_vector getPixelsList();
 
+    void new_px(coord, int &);
+    void sort_pixels();
+
     int num_vertexes();
     void add_vertex(coord);
     coord_vector getVertexes();
-    
-
 
     void setType(int);
     int getType();
-    
+
     void show_data(); //DBG func
 };
 

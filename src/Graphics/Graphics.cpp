@@ -253,12 +253,15 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
 {
     int H = img.rows;
     int W = img.cols;
-    for (int k = 0; k < rig.num_points; ++k)
+    for (int k = 0; k <= rig.num_points; ++k)
     {
         int i = rig.center_points[k].first;
         int j = rig.center_points[k].second;
-        cv::putText(img, std::to_string(k), cv::Point(j, i), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
-        if (k < rig.num_points - 1)
+        int diff = 0;
+        if (k == rig.num_points)
+            diff = 10;
+        cv::putText(img, std::to_string(k), cv::Point(j, i+diff), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
+        if (k < rig.num_points)
             join_ends(img, rig.center_points[k], rig.center_points[k + 1]);
         for (int c = -1; c < 2; ++c)
             for (int t = -1; t < 2; ++t)
@@ -277,7 +280,7 @@ void Graphics::apply_order(cv::Mat &img, coord_vector pixels_list)
 {
     for (int k = 0; k < pixels_list.size(); ++k)
     {
-        if (k % 40 == 0)
+        if (k % 20 == 0)
         {
             int i = pixels_list[k].first;
             int j = pixels_list[k].second;

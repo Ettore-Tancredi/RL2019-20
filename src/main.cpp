@@ -120,8 +120,8 @@ int main()
 			//graphics.surface(processed_frame, img.visited, img);
 			if (lt == STD_LINE)
 			{
-			//	graphics.apply_rig(processed_frame, rig);
-				graphics.apply_order(processed_frame, line.getPixelsList());
+				graphics.apply_rig(processed_frame, rig);
+				//graphics.apply_order(processed_frame, line.getPixelsList());
 			}
 
 			else

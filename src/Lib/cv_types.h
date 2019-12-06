@@ -9,10 +9,14 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <map>
 
 using coord = std::pair<int, int>;
 using coord_vector = std::vector<coord>;
 using coord_pair = std::pair<coord, coord>;
 using coord_pair_vector = std::vector<coord_pair>;
+
+using map_it = std::map<coord, int>::iterator;
+
 
 #endif
