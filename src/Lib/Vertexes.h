@@ -24,6 +24,11 @@ bool comp(double n1, double n2, double error)
 	return comp_up(n1, n2, error) && comp_down(n1, n2, error);
 }
 
+double dist_from_axis(coord px, int W)   // obviously, since we work with even image dimensions, we won't have a 0 error for any px value
+{
+	return double(px.second) - double(W / 2);
+}
+
 void left_side_count(Line &line, int visited[800][800], int H, int W, int lineW, double error)
 {
 	//LEFT
