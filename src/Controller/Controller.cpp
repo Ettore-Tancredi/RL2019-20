@@ -16,6 +16,9 @@ Controller::Controller()
   weights.resize(10);
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
+
+  slopes.resize(10);
+  distances.resize(10);
 }
 
 Controller::Controller(double p, double i, double d, int num_points, double max_x_val, double max_y_val)
@@ -29,6 +32,9 @@ Controller::Controller(double p, double i, double d, int num_points, double max_
   weights.resize(num_points);
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
+
+  slopes.resize(num_points);
+  distances.resize(num_points);
 
   MAX_X_VALUE = max_x_val;
   MAX_Y_VALUE = max_y_val;
@@ -67,6 +73,8 @@ int Controller::correction(coord_vector points)
   transform(points);
   for (int i = 0; i < points.size() - 1; ++i)
     slopes[i] = slope(points[i + 1].first - points[i].first, points[i + 1].second - points[i].second);
+  for (int i = 0; i < points.size() - 1; ++i)
+    distances[i] = (points[i + 1].first + points[i].first) / 2;
 
   double E_prec = E;
   E = 0;
@@ -74,7 +82,7 @@ int Controller::correction(coord_vector points)
   int p = 0;
   for (int i = 0; i < slopes.size(); ++i)
   {
-    E += weights[i] * slopes[i];
+    E += weights[i] * (slopes[i] + distances[i]);
     p += weights[i];
   }
 

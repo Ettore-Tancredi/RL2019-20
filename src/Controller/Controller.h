@@ -19,6 +19,7 @@ private:
   double compress(double);
   std::vector<double> slopes;
   double slope(double, double);
+  std::vector<double> distances;
 
 public:
   Controller();

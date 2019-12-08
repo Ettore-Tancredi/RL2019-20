@@ -93,7 +93,6 @@ void Motion::move(int speed_sx, int speed_dx)
 {
 	M_sx.move(speed_sx);
 	M_dx.move(speed_dx);
-
 }
 			   
 			   
