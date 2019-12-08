@@ -25,6 +25,10 @@ Graphics::Graphics(std::string name)
     Graphics::COLORS[BLUE_G].B = 51;
     Graphics::COLORS[BLUE_G].G = 255;
     Graphics::COLORS[BLUE_G].R = 0;
+
+    Graphics::COLORS[CYAN_G].B = 255;
+    Graphics::COLORS[CYAN_G].G = 255;
+    Graphics::COLORS[CYAN_G].R = 0;
 }
 
 void Graphics::draw(cv::Mat &img)
@@ -227,9 +231,9 @@ void Graphics::outline(cv::Mat &img, int visited[800][800], coord_vector &green)
     }
 }
 
-void Graphics::join_ends(cv::Mat &frame, coord a, coord b)
+void Graphics::join_ends(cv::Mat &frame, coord a, coord b, int color = BLUE_G)
 {
-    cv::line(frame, cv::Point(a.second, a.first), cv::Point(b.second, b.first), cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
+    cv::line(frame, cv::Point(a.second, a.first), cv::Point(b.second, b.first), cv::Scalar(COLORS[color].B, COLORS[color].G, COLORS[color].R));
 }
 
 coord G_median(coord a, coord b)
@@ -253,6 +257,7 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
 {
     int H = img.rows;
     int W = img.cols;
+    join_ends(img, coord(0, W / 2), coord(399, W/2), CYAN_G);
     for (int k = 0; k <= rig.num_points; ++k)
     {
         int i = rig.center_points[k].first;
@@ -260,9 +265,10 @@ void Graphics::apply_rig(cv::Mat &img, Rig rig)
         int diff = 0;
         if (k == rig.num_points)
             diff = 10;
-        cv::putText(img, std::to_string(k), cv::Point(j, i+diff), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
+        cv::putText(img, std::to_string(k), cv::Point(j, i + diff), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(COLORS[BLUE_G].B, COLORS[BLUE_G].G, COLORS[BLUE_G].R));
         if (k < rig.num_points)
             join_ends(img, rig.center_points[k], rig.center_points[k + 1]);
+        join_ends(img, rig.center_points[k], {rig.center_points[k].first, W / 2});
         for (int c = -1; c < 2; ++c)
             for (int t = -1; t < 2; ++t)
             {
