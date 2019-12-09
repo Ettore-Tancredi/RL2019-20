@@ -48,9 +48,5 @@ void Rig::make_rig(Line &line, coord_pair_vector paired_vertexes)
         coord avg = medium(line.get_px(right_i), line.get_px(left_i));
         center_points[i] = avg;
     }
-    
-    for (int i = line.num_pixels()-10; i < line.num_pixels(); ++i)
-        debug::printCoord(line.get_px(i), ' ');
-    std::cout << std::endl;
 
 }

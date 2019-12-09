@@ -40,9 +40,10 @@ int main()
 		bool silver_found = false;
 
 		int img_number = 0;
-		while (camera_opened && !silver_found && img_number < 87)
+		while (camera_opened && !silver_found && img_number <= 87)
 		{
-
+			if (img_number == 87)
+				img_number = 0;
 			log.start_clock();
 
 			//IMAGE PROCESSING
@@ -113,8 +114,8 @@ int main()
 			log.stop_clock();
 
 			//DEMO-DBG
-			graphics.draw(img.passImage());
-			cv::waitKey(0);
+			//graphics.draw(img.passImage());
+			//cv::waitKey(0);
 			cv::Mat processed_frame = img.copy();
 			graphics.outline(processed_frame, img.visited, img.green_regions);
 			//graphics.surface(processed_frame, img.visited, img);
@@ -123,14 +124,14 @@ int main()
 				graphics.apply_rig(processed_frame, rig);
 				//graphics.apply_order(processed_frame, line.getPixelsList());
 			}
-
 			else
 				graphics.make_hull(paired_vertexes, processed_frame);
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
 			line.show_data();
-			cv::waitKey(0);
+			if (cv::waitKey(200) == 'p')
+				cv::waitKey(0);
 		}
 		log.save();
 	}
