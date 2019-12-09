@@ -81,6 +81,11 @@ void Line::new_px(coord new_pixel, coord prev_pixel)
     }
 }
 
+int Line::found_pixels()
+{
+    return pixels_map.size();
+}
+
 void Line::sort_pixels()
 {
     for (multimap_it it = pixels_multimap.begin(); it != pixels_multimap.end(); ++it)

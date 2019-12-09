@@ -58,8 +58,11 @@ void outline_line(Image &img, Line &line)
 				}
 			}
 		}
-		if (line.getPixelsList().size() < MIN_BLACK_REGION_NODES)
+		if (line.found_pixels() < MIN_BLACK_REGION_NODES) 
+		{
 			line.clear();
+			img.clear();
+		}
 	}
 
 	line.sort_pixels();

@@ -43,6 +43,7 @@ public:
     coord_vector getPixelsList();
 
     void new_px(coord, coord);
+    int found_pixels();
     void sort_pixels();
 
     int num_vertexes();
