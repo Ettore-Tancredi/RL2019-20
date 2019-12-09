@@ -41,7 +41,7 @@ void outline_line(Image &img, Line &line)
 									int temp = img.matchesTarget(i + c, j + t);
 									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
 									{
-										stack.push(coord(i + c, j + t)); //buttare in map, com chiave ++index
+										stack.push(coord(i + c, j + t)); //buttare in map, con chiave ++index
 										line.new_px(coord(i + c, j + t), coord(i, j));
 									}
 									
@@ -58,6 +58,8 @@ void outline_line(Image &img, Line &line)
 				}
 			}
 		}
+		if (line.getPixelsList().size() < MIN_BLACK_REGION_NODES)
+			line.clear();
 	}
 
 	line.sort_pixels();
@@ -95,6 +97,9 @@ void outline_line(Image &img, Line &line)
 		}
 	}
 }
+
+
+
 void outline_green_regions(Image &img, Line &line)
 {
 	coord it;
