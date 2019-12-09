@@ -15,6 +15,7 @@ void Line::clear()
 
     pixels_list.clear();
     pixels_map.clear();
+    pixels_multimap.clear();
     vertexes.clear();
 }
 
@@ -63,21 +64,27 @@ coord Line::get_px(int i)
     return pixels_list[i];
 }
 
-void Line::new_px(coord new_pixel, int &index)
+void Line::new_px(coord new_pixel, coord prev_pixel)
 {
-    map_it it = pixels_map.find(new_pixel);
-    if (it == pixels_map.end())
+    map_it n_it = pixels_map.find(new_pixel);
+    if (n_it == pixels_map.end())
     {
+        map_it p_it = pixels_map.find(prev_pixel);
+        int index;
+        if (p_it == pixels_map.end())
+            index = 0;
+        else
+            index = p_it->second + 1;
+
         pixels_map.insert({new_pixel, index});
-        ++index;
+        pixels_multimap.insert({index, new_pixel});
     }
 }
 
 void Line::sort_pixels()
 {
-    pixels_list.resize(pixels_map.size());
-    for (map_it it = pixels_map.begin(); it != pixels_map.end(); ++it)
-        pixels_list[it->second] = it->first;
+    for (multimap_it it = pixels_multimap.begin(); it != pixels_multimap.end(); ++it)
+        pixels_list.push_back(it->second);
 }
 
 void Line::setType(int new_type)

@@ -17,6 +17,7 @@ using coord_pair = std::pair<coord, coord>;
 using coord_pair_vector = std::vector<coord_pair>;
 
 using map_it = std::map<coord, int>::iterator;
+using multimap_it = std::multimap<int, coord>::iterator;
 
 
 #endif

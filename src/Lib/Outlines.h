@@ -24,7 +24,7 @@ void outline_line(Image &img, Line &line)
 				//INIZIO DFS
 				std::stack<coord> stack;
 				stack.push(coord(img.height() - 1, x));
-				int index = 0;
+				line.new_px(coord(img.height() - 1, x), coord(img.height() - 1, x));
 				while (!stack.empty())
 				{
 					int i = stack.top().first;
@@ -42,7 +42,7 @@ void outline_line(Image &img, Line &line)
 									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
 									{
 										stack.push(coord(i + c, j + t)); //buttare in map, com chiave ++index
-										line.new_px(coord(i + c, j + t), index);
+										line.new_px(coord(i + c, j + t), coord(i, j));
 									}
 									
 								}

@@ -23,6 +23,7 @@ class Line
 private:
     coord_vector pixels_list;
     std::map<coord, int> pixels_map;
+    std::multimap<int, coord> pixels_multimap;
 
     coord_vector vertexes;
 
@@ -41,7 +42,7 @@ public:
     coord get_px(int);
     coord_vector getPixelsList();
 
-    void new_px(coord, int &);
+    void new_px(coord, coord);
     void sort_pixels();
 
     int num_vertexes();
