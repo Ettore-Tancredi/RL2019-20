@@ -32,7 +32,7 @@ int main()
         vals[i] /= 500;
     for (int i = 0; i < 52; ++i)
         vals[i] *= 1000;
-    ofstream out("media.txt");
+    ofstream out("average_execution.txt");
     for (int i = 0; i < 52; ++i)
         out << vals[i] << " " << min_vals[i]*1000 << " " << max_vals[i]*1000 << "\n";
     out.close();

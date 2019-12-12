@@ -47,7 +47,7 @@ int Controller::w(int n)
 
 double Controller::compress(double n)
 {
-  return n / (MAX_X_VALUE / 2);
+  return n / (MAX_X_VALUE);
 }
 
 double Controller::slope(double d_x, double d_y)
@@ -82,7 +82,7 @@ int Controller::correction(coord_vector points)
   int p = 0;
   for (int i = 0; i < slopes.size(); ++i)
   {
-    E += weights[i] * (slopes[i] + distances[i]);
+    E += weights[i] * compress(distances[i]);
     p += weights[i];
   }
 

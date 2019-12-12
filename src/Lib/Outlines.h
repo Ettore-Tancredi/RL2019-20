@@ -5,11 +5,13 @@
 #include "Line_constants.h"
 #include "Image.h"
 #include "Line.h"
+#include "Log.h"
 
-void outline_line(Image &img, Line &line)
+void outline_line(Image &img, Line &line, Log &log)
 {
 	bool sides_touched[4] = {};
 
+	log.add_time_point(); //1
 	for (int i = 0; i < 4; ++i)
 		sides_touched[i] = false;
 
@@ -44,7 +46,6 @@ void outline_line(Image &img, Line &line)
 										stack.push(coord(i + c, j + t)); //buttare in map, con chiave ++index
 										line.new_px(coord(i + c, j + t), coord(i, j));
 									}
-									
 								}
 
 						line.barycentre.first += i;
@@ -58,14 +59,15 @@ void outline_line(Image &img, Line &line)
 				}
 			}
 		}
-		if (line.found_pixels() < MIN_BLACK_REGION_NODES) 
+		if (line.found_pixels() < MIN_BLACK_REGION_NODES)
 		{
 			line.clear();
 			img.clear();
 		}
 	}
-
+	log.add_time_point();//2
 	line.sort_pixels();
+	log.add_time_point();//3
 
 	for (int j = 0; j < img.width(); ++j)
 	{
@@ -99,9 +101,9 @@ void outline_line(Image &img, Line &line)
 			break;
 		}
 	}
+
+	log.add_time_point();//4
 }
-
-
 
 void outline_green_regions(Image &img, Line &line)
 {

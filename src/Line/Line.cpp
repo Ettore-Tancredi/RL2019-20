@@ -64,6 +64,7 @@ coord Line::get_px(int i)
     return pixels_list[i];
 }
 
+//sostituire con matrice di visitati
 void Line::new_px(coord new_pixel, coord prev_pixel)
 {
     map_it n_it = pixels_map.find(new_pixel);

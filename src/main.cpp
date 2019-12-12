@@ -11,7 +11,7 @@
 #include "Line/Rig.h"
 #include "Controller/Controller.h"
 #include "Log/Log.h"
-// #include "Lib/debugging.h"
+// #include "Lib/debugging.h" 
 
 #include "Constants/Line_constants.h"
 
@@ -40,10 +40,10 @@ int main()
 		bool silver_found = false;
 
 		int img_number = 0;
-		while (camera_opened && !silver_found && img_number <= 87)
+		while (camera_opened && !silver_found && img_number <= 51)
 		{
-			if (img_number == 87)
-				img_number = 0;
+			//if (img_number == 87)
+			//	img_number = 0;
 			log.start_clock();
 
 			//IMAGE PROCESSING
@@ -56,15 +56,14 @@ int main()
 				log.write(msg);
 				break;
 			}
-			
+
 			img.clear();
 			line.clear();
-
-			outline_line(img, line);
+			outline_line(img, line, log);
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
 			greenRegionsPosition(img, line);
-			
+
 			coord_pair_vector paired_vertexes;
 			try
 			{
@@ -83,8 +82,7 @@ int main()
 			case 2:
 				line.setType(STD_LINE);
 				rig.make_rig(line, paired_vertexes);
-				//CALCULATING ERROR
-				//... aggiungere tutta la roba, prende rig in input
+				controller.correction(rig.center_points);
 				break;
 			case 3:
 				line.setType(T_INTERSECTION);
@@ -126,6 +124,7 @@ int main()
 			}
 			else
 				graphics.make_hull(paired_vertexes, processed_frame);
+	
 			graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
