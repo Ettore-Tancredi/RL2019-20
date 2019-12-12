@@ -24,11 +24,15 @@ void outline_line(Image &img, Line &line, Log &log)
 			if (img.visited[img.height() - 1][x] == 0)
 			{
 				//INIZIO DFS
+				log.add_time_point();
 				std::stack<coord> stack;
+				log.add_time_point();
 				stack.push(coord(img.height() - 1, x));
 				line.new_px(coord(img.height() - 1, x), coord(img.height() - 1, x));
+
 				while (!stack.empty())
 				{
+					
 					int i = stack.top().first;
 					int j = stack.top().second;
 
@@ -43,7 +47,7 @@ void outline_line(Image &img, Line &line, Log &log)
 									int temp = img.matchesTarget(i + c, j + t);
 									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
 									{
-										stack.push(coord(i + c, j + t)); //buttare in map, con chiave ++index
+										stack.push(coord(i + c, j + t)); 
 										line.new_px(coord(i + c, j + t), coord(i, j));
 									}
 								}
@@ -56,10 +60,11 @@ void outline_line(Image &img, Line &line, Log &log)
 						if (img.matchesTarget(i, j) == CORNER_PIXEL)
 							img.visited[i][j] = 2;
 					}
+
 				}
 			}
 		}
-		if (line.found_pixels() < MIN_BLACK_REGION_NODES)
+		if (line.found_pixels() < MIN_BLACK_REGION_NODES && line.found_pixels() > 0)
 		{
 			line.clear();
 			img.clear();
@@ -67,7 +72,6 @@ void outline_line(Image &img, Line &line, Log &log)
 	}
 	log.add_time_point();//2
 	line.sort_pixels();
-	log.add_time_point();//3
 
 	for (int j = 0; j < img.width(); ++j)
 	{
@@ -102,7 +106,6 @@ void outline_line(Image &img, Line &line, Log &log)
 		}
 	}
 
-	log.add_time_point();//4
 }
 
 void outline_green_regions(Image &img, Line &line)

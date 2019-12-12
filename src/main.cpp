@@ -111,26 +111,26 @@ int main()
 
 			log.stop_clock();
 
-			//DEMO-DBG
-			//graphics.draw(img.passImage());
-			//cv::waitKey(0);
-			cv::Mat processed_frame = img.copy();
-			graphics.outline(processed_frame, img.visited, img.green_regions);
-			//graphics.surface(processed_frame, img.visited, img);
-			if (lt == STD_LINE)
-			{
-				graphics.apply_rig(processed_frame, rig);
-				//graphics.apply_order(processed_frame, line.getPixelsList());
-			}
-			else
-				graphics.make_hull(paired_vertexes, processed_frame);
+			// //DEMO-DBG
+			// //graphics.draw(img.passImage());
+			// //cv::waitKey(0);
+			// cv::Mat processed_frame = img.copy();
+			// graphics.outline(processed_frame, img.visited, img.green_regions);
+			// //graphics.surface(processed_frame, img.visited, img);
+			// if (lt == STD_LINE)
+			// {
+			// 	graphics.apply_rig(processed_frame, rig);
+			// 	//graphics.apply_order(processed_frame, line.getPixelsList());
+			// }
+			// else
+			// 	graphics.make_hull(paired_vertexes, processed_frame);
 	
-			graphics.draw(processed_frame);
+			// graphics.draw(processed_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
 			line.show_data();
-			if (cv::waitKey(200) == 'p')
-				cv::waitKey(0);
+			// if (cv::waitKey(200) == 'p')
+			// 	cv::waitKey(0);
 		}
 		log.save();
 	}

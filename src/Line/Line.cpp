@@ -67,15 +67,16 @@ coord Line::get_px(int i)
 //sostituire con matrice di visitati
 void Line::new_px(coord new_pixel, coord prev_pixel)
 {
+    if (new_pixel == prev_pixel)
+    {
+        pixels_map.insert({new_pixel, 0});
+        pixels_multimap.insert({0, new_pixel});
+    }
     map_it n_it = pixels_map.find(new_pixel);
     if (n_it == pixels_map.end())
     {
         map_it p_it = pixels_map.find(prev_pixel);
-        int index;
-        if (p_it == pixels_map.end())
-            index = 0;
-        else
-            index = p_it->second + 1;
+        int index = p_it->second + 1;
 
         pixels_map.insert({new_pixel, index});
         pixels_multimap.insert({index, new_pixel});
