@@ -11,7 +11,7 @@
 #include "Line/Rig.h"
 #include "Controller/Controller.h"
 #include "Log/Log.h"
-// #include "Lib/debugging.h" 
+// #include "Lib/debugging.h"
 
 #include "Constants/Line_constants.h"
 
@@ -27,6 +27,8 @@ int main()
 	Log log("run_log.txt");
 
 	Graphics graphics("feed"); //ARG: window name
+	Graphics Demo1("demo1");
+//	Graphics Demo2("demo2");
 
 	img.load_data("color_data.txt");
 
@@ -40,10 +42,10 @@ int main()
 		bool silver_found = false;
 
 		int img_number = 0;
-		while (camera_opened && !silver_found && img_number <= 51)
+		while (camera_opened && !silver_found && img_number <= 87)
 		{
-			//if (img_number == 87)
-			//	img_number = 0;
+			if (img_number == 87)
+				img_number = 0;
 			log.start_clock();
 
 			//IMAGE PROCESSING
@@ -111,26 +113,29 @@ int main()
 
 			log.stop_clock();
 
-			// //DEMO-DBG
-			// //graphics.draw(img.passImage());
-			// //cv::waitKey(0);
-			// cv::Mat processed_frame = img.copy();
-			// graphics.outline(processed_frame, img.visited, img.green_regions);
-			// //graphics.surface(processed_frame, img.visited, img);
-			// if (lt == STD_LINE)
-			// {
-			// 	graphics.apply_rig(processed_frame, rig);
-			// 	//graphics.apply_order(processed_frame, line.getPixelsList());
-			// }
-			// else
-			// 	graphics.make_hull(paired_vertexes, processed_frame);
-	
-			// graphics.draw(processed_frame);
+			//DEMO-DBG
+			Demo1.draw(img.passImage());
+			//cv::waitKey(0);
+			cv::Mat processed_frame = img.copy().clone();
+			graphics.outline(processed_frame, img.visited, img.green_regions);
+
+		//	cv::Mat demo_frame = img.copy();
+		//	Demo2.surface(demo_frame, img.visited, img);
+			if (lt == STD_LINE)
+			{
+				graphics.apply_rig(processed_frame, rig);
+				//graphics.apply_order(processed_frame, line.getPixelsList());
+			}
+			else
+				graphics.make_hull(paired_vertexes, processed_frame);
+
+			graphics.draw(processed_frame);
+		//	Demo2.draw(demo_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
 			line.show_data();
-			// if (cv::waitKey(200) == 'p')
-			// 	cv::waitKey(0);
+			if (cv::waitKey(100) == 'p')
+				cv::waitKey(0);
 		}
 		log.save();
 	}
