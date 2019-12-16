@@ -24,11 +24,10 @@ int main()
 	Line line;
 	Rig rig(NUM_RIG_POINTS);
 	Controller controller(KP, KI, KD, NUM_RIG_POINTS, IMG_WIDTH, IMG_HEIGHT);
+
 	Log log("run_log.txt");
 
-	Graphics graphics("feed"); //ARG: window name
-	Graphics Demo1("demo1");
-//	Graphics Demo2("demo2");
+	//Graphics graphics("feed");
 
 	img.load_data("color_data.txt");
 
@@ -42,13 +41,19 @@ int main()
 		bool silver_found = false;
 
 		int img_number = 0;
-		while (camera_opened && !silver_found && img_number <= 87)
+		while (camera_opened && !silver_found && img_number < 87)
 		{
-			if (img_number == 87)
-				img_number = 0;
 			log.start_clock();
+			/***************************************************************************************/
 
-			//IMAGE PROCESSING
+			//RESET
+			img.clear();
+			line.clear();
+
+			log.add_time_point();
+			/***************************************************************************************/
+
+			//TAKE PHOTO
 			try
 			{
 				camera.fillFrame(img.passImage(), ++img_number);
@@ -59,8 +64,10 @@ int main()
 				break;
 			}
 
-			img.clear();
-			line.clear();
+			log.add_time_point();
+			/***************************************************************************************/
+
+			//IMAGE PROCESSING
 			outline_line(img, line, log);
 			outline_green_regions(img, line);
 			count_vertexes(line, img.visited, img.height(), img.width(), AVERAGE_LINE_WIDTH);
@@ -76,6 +83,10 @@ int main()
 				std::cout << msg;
 			}
 
+			log.add_time_point();
+			/***************************************************************************************/
+
+			//ESTABLISH LINE TYPE
 			switch (paired_vertexes.size())
 			{
 			case 1:
@@ -84,7 +95,6 @@ int main()
 			case 2:
 				line.setType(STD_LINE);
 				rig.make_rig(line, paired_vertexes);
-				controller.correction(rig.center_points);
 				break;
 			case 3:
 				line.setType(T_INTERSECTION);
@@ -97,12 +107,15 @@ int main()
 				break;
 			}
 
+			log.add_time_point();
+			/***************************************************************************************/
+
+			//MAKE CORRECTION
 			int lt = line.getType();
 			if (lt == 0)
 				; //fare qualcosa
 			if (lt >= 1)
 			{
-				//considera distanza estremità bassa - asse
 				if (lt == 1)
 					; //avanti?
 				if (lt > 2)
@@ -112,30 +125,24 @@ int main()
 			}
 
 			log.stop_clock();
+			/***************************************************************************************/
 
-			//DEMO-DBG
-			Demo1.draw(img.passImage());
-			//cv::waitKey(0);
-			cv::Mat processed_frame = img.copy().clone();
-			graphics.outline(processed_frame, img.visited, img.green_regions);
+			//VISUALIZE (DBG)
+			// cv::Mat processed_frame = img.copy();
+			// graphics.outline(processed_frame, img.visited, img.green_regions);
+			// if (lt == STD_LINE)
+			// 	graphics.apply_rig(processed_frame, rig);
+			// else
+			// 	graphics.make_hull(paired_vertexes, processed_frame);
 
-		//	cv::Mat demo_frame = img.copy();
-		//	Demo2.surface(demo_frame, img.visited, img);
-			if (lt == STD_LINE)
-			{
-				graphics.apply_rig(processed_frame, rig);
-				//graphics.apply_order(processed_frame, line.getPixelsList());
-			}
-			else
-				graphics.make_hull(paired_vertexes, processed_frame);
+			// graphics.draw(processed_frame);
 
-			graphics.draw(processed_frame);
-		//	Demo2.draw(demo_frame);
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
 			line.show_data();
-			if (cv::waitKey(100) == 'p')
-				cv::waitKey(0);
+
+		//	if (cv::waitKey(100) == 'p')
+		//		cv::waitKey(0);
 		}
 		log.save();
 	}
