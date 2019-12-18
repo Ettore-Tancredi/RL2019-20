@@ -21,15 +21,16 @@ int main()
 {
 
 	Image img(IMG_HEIGHT, IMG_WIDTH);
+	img.load_data("color_data.txt");
+
 	Line line;
 	Rig rig(NUM_RIG_POINTS);
+
 	Controller controller(KP, KI, KD, NUM_RIG_POINTS, IMG_WIDTH, IMG_HEIGHT);
 
 	Log log("run_log.txt");
 
-	//Graphics graphics("feed");
-
-	img.load_data("color_data.txt");
+	Graphics graphics("feed");
 
 	bool camera_opened = true;
 	Camera camera(camera_opened, 30, 400, 400);
@@ -46,7 +47,7 @@ int main()
 			log.start_clock();
 			/***************************************************************************************/
 
-			//RESET
+			//RESET STATE
 			img.clear();
 			line.clear();
 
@@ -56,7 +57,7 @@ int main()
 			//TAKE PHOTO
 			try
 			{
-				camera.fillFrame(img.passImage(), ++img_number);
+				camera.fillFrame(img.handle(), ++img_number);
 			}
 			catch (const char *msg)
 			{
@@ -128,21 +129,21 @@ int main()
 			/***************************************************************************************/
 
 			//VISUALIZE (DBG)
-			// cv::Mat processed_frame = img.copy();
-			// graphics.outline(processed_frame, img.visited, img.green_regions);
-			// if (lt == STD_LINE)
-			// 	graphics.apply_rig(processed_frame, rig);
-			// else
-			// 	graphics.make_hull(paired_vertexes, processed_frame);
+			cv::Mat processed_frame = img.handle();
+			graphics.outline(processed_frame, img.visited, img.green_regions);
+			if (lt == STD_LINE)
+				graphics.apply_rig(processed_frame, rig);
+			else
+				graphics.make_hull(paired_vertexes, processed_frame);
 
-			// graphics.draw(processed_frame);
+			graphics.draw(processed_frame);
 
 			std::cout << "Image No. " << img_number << std::endl;
 			log.print_current_execution_time();
 			line.show_data();
 
-		//	if (cv::waitKey(100) == 'p')
-		//		cv::waitKey(0);
+			if (cv::waitKey(100) == 'p')
+				cv::waitKey(0);
 		}
 		log.save();
 	}

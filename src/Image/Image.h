@@ -15,8 +15,9 @@ const int MAX_DIM = 800;
 enum
 {
     NORMAL_PIXEL = 1,
-    CORNER_PIXEL,
+    VERTEX_PIXEL,
 };
+
 enum Colors
 {
     WHITE = 0,
@@ -34,30 +35,28 @@ private:
     std::vector<char> regions;
 
 public:
-    Image(int, int); //height width
+    Image(int, int); //ARG: HEIGHT, WIDTH
 
     int visited[MAX_DIM][MAX_DIM];
-    std::stack<std::pair<int, int>> green_pixels;
-    std::vector<std::pair<int, int>> green_regions;
-
-    void clear();
+    std::stack<coord> green_pixels;
+    coord_vector green_regions;
 
     int height();
     int width();
+    bool bounds(int, int);
+    cv::Mat &handle(); //note: if you want an actual copy of the image, call .clone() on the return value
     Colors px_color(int, int);
-    cv::Mat copy(); //returns reference, call .clone() for actual copy
-    cv::Mat &passImage();
 
-    int num_regions();
-    int count_regions_of_type(char);
     void add_region(char);
     bool find_region(char);
+    int count_regions(char);
+    int num_regions();
+
 
     int matchesTarget(int, int);
     bool matchesGreenTarget(int, int);
-    bool is_inside(int, int);
-
-    void get_debug_color(int, int /*, int &, int &, int &*/);
+    
+    void clear();
 
     void load_data(std::string);
 };

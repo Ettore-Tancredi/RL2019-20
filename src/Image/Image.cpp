@@ -13,14 +13,9 @@ Image::Image(int h, int w)
   W = w;
 }
 
-cv::Mat Image::copy()
+int Image::height()
 {
-  return image;
-}
-
-cv::Mat &Image::passImage()
-{
-  return image;
+  return H;
 }
 
 int Image::width()
@@ -28,52 +23,14 @@ int Image::width()
   return W;
 }
 
-int Image::height()
+cv::Mat &Image::handle()
 {
-  return H;
+  return image;
 }
 
-void Image::clear()
+bool Image::bounds(int i, int j)
 {
-  for (int i = 0; i < H; ++i)
-    for (int j = 0; j < W; ++j)
-      visited[i][j] = 0;
-
-  regions.clear();
-  std::stack<coord> clear;
-  green_pixels.swap(clear);
-  green_regions.clear();
-}
-
-void Image::add_region(char region)
-{
-  regions.push_back(region);
-}
-
-bool Image::find_region(char region_type)
-{
-  for (auto &i : regions)
-  {
-    if (i == region_type)
-      return true;
-  }
-  return false;
-}
-
-int Image::count_regions_of_type(char region_type)
-{
-  int count = 0;
-  for (auto &i : regions)
-  {
-    if (i == region_type)
-      ++count;
-  }
-  return count;
-}
-
-int Image::num_regions()
-{
-  return regions.size();
+  return (i >= 0 && i < H && j >= 0 && j < W);
 }
 
 Colors Image::px_color(int i, int j)
@@ -95,48 +52,83 @@ Colors Image::px_color(int i, int j)
     return SILVER;
 }
 
-bool Image::is_inside(int i, int j)
+void Image::add_region(char region)
 {
-  return (i >= 0 && i < H && j >= 0 && j < W);
+  regions.push_back(region);
 }
 
-void Image::get_debug_color(int i, int j /*, int &t1, int &t2, int &t3*/)
+bool Image::find_region(char region_type)
 {
-  cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
-  int t1 = pixel.val[0];
-  int t2 = pixel.val[1];
-  int t3 = pixel.val[2];
-
-  std::cout << t1 << " " << t2 << " " << t3 << " " << color_set[t3][t2][t1] << std::endl;
+  for (auto &i : regions)
+  {
+    if (i == region_type)
+      return true;
+  }
+  return false;
 }
 
+int Image::count_regions(char region_type)
+{
+  int count = 0;
+  for (auto &i : regions)
+  {
+    if (i == region_type)
+      ++count;
+  }
+  return count;
+}
+
+int Image::num_regions()
+{
+  return regions.size();
+}
+
+/*****************************************************************************************
+ * INT MATCHES_TARGET(pixel coord)
+ * 
+ * returns LABEL of pixel based on the SATISFIED CRITERIA:
+ *  - (NEIGHBOURING a BLACK OR WHITE pixel) AND (on the IMAGE BORDER) -> VERTEX_PIXEL
+ *  - (NEIGHBOURING a BLACK OR WHITE pixel) OR (on the IMAGE BORDER) -> NORMAL_PIXEL  
+ *  - if none are SATISFIED -> FALSE
+ * 
+ *  - if a NEIGHBOURING PIXEL is identified as having GREEN COLOR, it is added to 
+ *    the list of GREEN_PIXELS
+ * 
+ * *************************************************************************************/
 int Image::matchesTarget(int i, int j)
 {
   bool isOnBorder = false;
-  bool isNextToWhite = false;
+  bool isNextToDifferent = false;
 
   for (int c = -1; c < 2; ++c)
     for (int t = -1; t < 2; ++t)
     {
-      if (!is_inside(i + c, j + t) && !(c == 0 && t == 0))
+      if (!bounds(i + c, j + t) && !(c == 0 && t == 0))
         isOnBorder = true;
       else if (px_color(i + c, j + t) == WHITE)
-        isNextToWhite = true;
+        isNextToDifferent = true;
       else if (px_color(i + c, j + t) == GREEN)
       {
-        isNextToWhite = true;
-        green_pixels.push(std::make_pair(i + c, j + t));
+        isNextToDifferent = true;
+        green_pixels.push(coord(i + c, j + t));
       }
     }
 
-  if (isOnBorder && isNextToWhite)
-    return CORNER_PIXEL;
-  if (isNextToWhite || isOnBorder)
+  if (isOnBorder && isNextToDifferent)
+    return VERTEX_PIXEL;
+  if (isNextToDifferent || isOnBorder)
     return NORMAL_PIXEL;
 
   return false;
 }
 
+/*****************************************************************************************
+ * BOOL MATCHES_GREEN_TARGET(pixel coord)
+ * 
+ * returns TRUE if the pixels matchs the ACCEPTABILITY CRITERIA:
+ *  - (GREEN in COLOR) AND (NEIGHBOURING a BLACK OR WHITE pixel, OR on the IMAGE BORDER)  
+ * 
+ * *************************************************************************************/
 bool Image::matchesGreenTarget(int i, int j)
 {
   if (px_color(i, j) != GREEN)
@@ -144,7 +136,7 @@ bool Image::matchesGreenTarget(int i, int j)
   for (int c = -1; c < 2; ++c)
     for (int t = -1; t < 2; ++t)
     {
-      if (!is_inside(i + c, j + t))
+      if (!bounds(i + c, j + t))
         return true;
       if (px_color(i + c, j + t) == BLACK)
         return true;
@@ -154,14 +146,26 @@ bool Image::matchesGreenTarget(int i, int j)
   return false;
 }
 
-/* VOID LOAD_DATA( STRING FILE_NAME )
 
-    - called on boot
+void Image::clear()
+{
+  for (int i = 0; i < H; ++i)
+    for (int j = 0; j < W; ++j)
+      visited[i][j] = 0;
 
-    -  assigns to each element of the color space (C[i][j][k] with 0 <= i,j,k < 256)
-      the label established during training 
-*/
+  regions.clear();
+  std::stack<coord> clear;
+  green_pixels.swap(clear);
+  green_regions.clear();
+}
 
+/*************************************************************************************
+ * VOID LOAD_DATA( STRING FILE_NAME )
+ * 
+ * -  assigns to each element of the RGB color space (C[i][j][k] with 0 <= i,j,k < 256)
+      the label established during training
+      
+**************************************************************************************/
 void Image::load_data(std::string file_name)
 {
   std::ifstream datafile(file_name);

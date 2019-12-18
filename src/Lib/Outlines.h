@@ -42,10 +42,10 @@ void outline_line(Image &img, Line &line, Log &log)
 					{
 						for (int c = -1; c < 2; ++c)
 							for (int t = -1; t < 2; ++t)
-								if (img.is_inside(i + c, j + t) && !(c == 0 && t == 0))
+								if (img.bounds(i + c, j + t) && !(c == 0 && t == 0))
 								{
 									int temp = img.matchesTarget(i + c, j + t);
-									if ((temp == NORMAL_PIXEL || temp == CORNER_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
+									if ((temp == NORMAL_PIXEL || temp == VERTEX_PIXEL) && (img.visited[i + c][j + t] == 0) && img.px_color(i + c, j + t) == BLACK)
 									{
 										stack.push(coord(i + c, j + t)); 
 										line.new_px(coord(i + c, j + t), coord(i, j));
@@ -57,7 +57,7 @@ void outline_line(Image &img, Line &line, Log &log)
 						//line.add_px(coord(i, j));
 
 						img.visited[i][j] = 1;
-						if (img.matchesTarget(i, j) == CORNER_PIXEL)
+						if (img.matchesTarget(i, j) == VERTEX_PIXEL)
 							img.visited[i][j] = 2;
 					}
 
@@ -138,7 +138,7 @@ void outline_green_regions(Image &img, Line &line)
 
 					for (int c = -1; c < 2; ++c)
 						for (int t = -1; t < 2; ++t)
-							if (img.is_inside(i + c, j + t) && !(c == 0 && t == 0))
+							if (img.bounds(i + c, j + t) && !(c == 0 && t == 0))
 							{
 								bool temp = img.matchesGreenTarget(i + c, j + t);
 								if (temp && img.visited[i + c][j + t] == 0)
