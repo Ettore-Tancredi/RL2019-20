@@ -12,14 +12,13 @@ private:
   double P, I, D, E;
   double MAX_X_VALUE, MAX_Y_VALUE;
 
+  void transform(coord_vector &);
+
   std::vector<int> weights;
   int w(int);
 
-  void transform(coord_vector &);
   double compress(double);
-  std::vector<double> slopes;
-  double slope(double, double);
-  std::vector<double> distances;
+  int x_distance(int, int);
 
 public:
   Controller();

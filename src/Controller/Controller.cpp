@@ -17,7 +17,6 @@ Controller::Controller()
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 
-  slopes.resize(10);
   distances.resize(10);
 }
 
@@ -33,9 +32,6 @@ Controller::Controller(double p, double i, double d, int num_points, double max_
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 
-  slopes.resize(num_points);
-  distances.resize(num_points);
-
   MAX_X_VALUE = max_x_val;
   MAX_Y_VALUE = max_y_val;
 }
@@ -47,17 +43,16 @@ int Controller::w(int n)
 
 double Controller::compress(double n)
 {
-  return n / (MAX_X_VALUE);
+  return n / (MAX_X_VALUE / 2);
 }
 
-double Controller::slope(double d_x, double d_y)
-{
-  if (d_y == 0)
-    return 1;
-  else
-    return d_x / d_y;
-}
-
+/*****************************************************************************************
+ * VOID TRANSFORM(COORD_VECTOR)
+ * 
+ *  - converts from the matrix coordinate system (0, 0) in the upper left corner,
+ *    to the error coordinate system (0, 0) in the center of the lower side
+  
+ * *************************************************************************************/
 void Controller::transform(coord_vector &points)
 {
   for (int i = 0; i < points.size(); ++i)
@@ -68,21 +63,23 @@ void Controller::transform(coord_vector &points)
   }
 }
 
+int Controller::x_distance(int x1, int x2)
+{
+  return x1 - x2;
+}
+
+
 int Controller::correction(coord_vector points)
 {
   transform(points);
-  for (int i = 0; i < points.size() - 1; ++i)
-    slopes[i] = slope(points[i + 1].first - points[i].first, points[i + 1].second - points[i].second);
-  for (int i = 0; i < points.size() - 1; ++i)
-    distances[i] = (points[i + 1].first + points[i].first) / 2;
 
   double E_prec = E;
   E = 0;
 
   int p = 0;
-  for (int i = 0; i < slopes.size(); ++i)
+  for (int i = 0; i < points.size(); ++i)
   {
-    E += weights[i] * compress(distances[i]);
+    E += weights[i] * compress(x_distance(points[i].first, MAX_X_VALUE/2));
     p += weights[i];
   }
 
