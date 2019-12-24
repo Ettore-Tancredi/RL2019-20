@@ -33,7 +33,10 @@ public:
     void clear();
 
     std::pair<int, int> barycentre;
+
     bool greenPos[2][2];
+    int num_G_regions();
+
 
     int num_pixels();
     void add_px(coord);

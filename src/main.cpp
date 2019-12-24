@@ -1,7 +1,8 @@
 #include <opencv2/opencv.hpp>
 
-#include "Lib/cv_types.h"
+#include <limits>
 
+#include "Lib/cv_types.h"
 #include "Lib/Outlines.h"
 #include "Lib/Vertexes.h"
 #include "Image/Image.h"
@@ -112,23 +113,45 @@ int main()
 			/***************************************************************************************/
 
 			//MAKE CORRECTION
+			int adjustment = std::numeric_limits<int>::max();
 			int lt = line.getType();
-			if (lt == 0)
+			if (lt == UNKNOWN)
 				; //fare qualcosa
-			if (lt >= 1)
+			else
 			{
-				if (lt == 1)
+				if (lt == INTERRUPT)
 					; //avanti?
-				if (lt > 2)
-					; //controlla verde
+				if (lt == STD_LINE)
+				{
+					adjustment = controller.correction(rig.center_points);
+					//correggere con i motori
+				}
 				else
-					; //esegui correzione
+				{
+
+					if (line.greenPos[1][0])
+						; //girare
+					else if (line.greenPos[1][1])
+						; //girare
+					else
+					{
+						coord_vector line_ends;
+						for (int i = 0; i < paired_vertexes.size(); ++i)
+							line_ends.push_back(medium(paired_vertexes[i].first, paired_vertexes[i].second));
+						
+						sort(line_ends.begin(), line_ends.end(), comp_j);
+
+						adjustment = controller.correction(line_ends);
+						//correggere con i motori
+
+					}
+				}
 			}
 
 			log.stop_clock();
 			/***************************************************************************************/
 
-			//VISUALIZE (DBG)
+			//VISUALIZE (DBG
 			cv::Mat processed_frame = img.handle();
 			graphics.outline(processed_frame, img.visited, img.green_regions);
 			if (lt == STD_LINE)
@@ -142,7 +165,14 @@ int main()
 			log.print_current_execution_time();
 			line.show_data();
 
-			if (cv::waitKey(100) == 'p')
+			std::cout << "Error: ";
+			if (adjustment == std::numeric_limits<int>::max())
+				std::cout << "\\" << std::endl;
+			else
+				std::cout << adjustment << std::endl;
+			std::cout << std::endl;
+
+			//if (cv::waitKey(100) == 'p')
 				cv::waitKey(0);
 		}
 		log.save();

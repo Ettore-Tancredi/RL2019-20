@@ -11,8 +11,8 @@ const int MIN_BLACK_REGION_NODES = 50;  //guess
 const int NUM_RIG_POINTS = 10;
 
 const int KP = 10;
-const int KD = 10;
-const int KI = 10;
+const int KD = 0;
+const int KI = 0;
 
 
 #endif

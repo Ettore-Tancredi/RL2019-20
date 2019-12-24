@@ -14,8 +14,6 @@
 
 class Rig
 {
-private:
-    
 
 public:
     Rig(int);

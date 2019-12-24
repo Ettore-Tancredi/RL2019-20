@@ -9,6 +9,16 @@
 #include <limits>
 #include <algorithm>
 
+coord medium(coord a, coord b)
+{
+    return coord((a.first + b.first) / 2, (a.second + b.second) / 2);
+}
+
+bool comp_j(const coord a, const coord b)
+{
+	return a.second < b.second;
+}
+
 bool comp_up(double n1, double n2, double error)
 {
 	return (n1 < n2 + (n2 * error));
@@ -234,7 +244,7 @@ double euclidean_distance(coord p1, coord p2)
 	return sqrt(i * i + j * j);
 }
 
-bool func(std::pair<std::pair<coord, coord>, double> a, std::pair<std::pair<coord, coord>, double> b)
+bool func(std::pair<coord_pair, double> a, std::pair<coord_pair, double> b)
 {
 	if (a.second < b.second)
 		return true;

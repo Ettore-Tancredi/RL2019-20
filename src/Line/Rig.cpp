@@ -1,6 +1,8 @@
 #include "Rig.h"
-
 #include "debugging.h"
+
+coord medium(coord, coord);
+
 
 Rig::Rig(int points)
 {
@@ -14,11 +16,6 @@ bool comp_coord(coord a, coord b)
         return a.second > b.second;
     else
         return a.first > b.first;
-}
-
-coord medium(coord a, coord b)
-{
-    return {(a.first + b.first) / 2, (a.second + b.second) / 2};
 }
 
 bool comp_func(coord_pair a, coord_pair b)
