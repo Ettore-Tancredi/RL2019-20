@@ -17,13 +17,13 @@ struct BGR
     int R;
 };
 
-enum
+enum Graphics_colors
 {
-    WHITE_G = 0,
-    BLACK_G,
-    GREEN_G,
-    BLUE_G,
-    CYAN_G
+    G_YELLOW = 0,
+    G_RED,
+    G_BLUE,
+    G_GREEN,
+    G_CYAN
 };
 
 class Graphics
@@ -31,6 +31,8 @@ class Graphics
 private:
     std::string windowName;
     BGR COLORS[5];
+
+    void join_ends(cv::Mat &, coord, coord, int);
 
 public:
     Graphics(std::string);
@@ -40,11 +42,8 @@ public:
     void outline(cv::Mat &, int[800][800], coord_vector &);
     void surface(cv::Mat &, int[800][800], Image &);
     void apply_rig(cv::Mat &, Rig);
-    void join_ends(cv::Mat &, coord, coord, int);
     void make_hull(std::vector<std::pair<coord, coord>>, cv::Mat &);
     void apply_order(cv::Mat &, coord_vector);
 };
-
-
 
 #endif

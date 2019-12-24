@@ -16,8 +16,6 @@ Controller::Controller()
   weights.resize(10);
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
-
-  distances.resize(10);
 }
 
 Controller::Controller(double p, double i, double d, int num_points, double max_x_val, double max_y_val)
