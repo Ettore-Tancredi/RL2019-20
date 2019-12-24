@@ -22,9 +22,8 @@ class Line
 {
 private:
     coord_vector pixels_list;
-    std::map<coord, int> pixels_map;
-    std::multimap<int, coord> pixels_multimap;
-
+    std::map<coord, int> pixels_map; //keeps track of whether a pixel has already been found, and the cardinality of the node
+    std::multimap<int, coord> pixels_multimap; //Stores the nodes in the order they are found. The key corresponds to the cardinality.
     coord_vector vertexes;
 
     int type;

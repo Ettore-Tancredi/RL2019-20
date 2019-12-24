@@ -19,20 +19,6 @@ void Line::clear()
     vertexes.clear();
 }
 
-int Line::num_vertexes()
-{
-    return vertexes.size();
-}
-
-void Line::add_vertex(coord new_vertex)
-{
-    vertexes.push_back(new_vertex);
-}
-
-coord_vector Line::getVertexes()
-{
-    return vertexes;
-}
 
 int Line::num_pixels()
 {
@@ -54,17 +40,16 @@ int Line::find_px(coord search)
     return -1;
 }
 
-coord_vector Line::getPixelsList()
-{
-    return pixels_list;
-}
-
 coord Line::get_px(int i)
 {
     return pixels_list[i];
 }
 
-//sostituire con matrice di visitati
+coord_vector Line::getPixelsList()
+{
+    return pixels_list;
+}
+
 void Line::new_px(coord new_pixel, coord prev_pixel)
 {
     if (new_pixel == prev_pixel)
@@ -92,6 +77,21 @@ void Line::sort_pixels()
 {
     for (multimap_it it = pixels_multimap.begin(); it != pixels_multimap.end(); ++it)
         pixels_list.push_back(it->second);
+}
+
+int Line::num_vertexes()
+{
+    return vertexes.size();
+}
+
+void Line::add_vertex(coord new_vertex)
+{
+    vertexes.push_back(new_vertex);
+}
+
+coord_vector Line::getVertexes()
+{
+    return vertexes;
 }
 
 void Line::setType(int new_type)
