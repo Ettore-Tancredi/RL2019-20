@@ -140,8 +140,8 @@ int main()
 							line_ends.push_back(medium(paired_vertexes[i].first, paired_vertexes[i].second));
 						
 						sort(line_ends.begin(), line_ends.end(), comp_j);
-
-						adjustment = controller.correction(line_ends);
+						
+						adjustment = controller.correction({line_ends.front(), line_ends.back()});
 						//correggere con i motori
 
 					}

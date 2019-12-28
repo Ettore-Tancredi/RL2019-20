@@ -1,6 +1,7 @@
 #include <utility>
 
 #include "Controller.h"
+#include "debugging.h"
 
 Controller::Controller()
 {
@@ -13,7 +14,7 @@ Controller::Controller()
   MAX_X_VALUE = 400;
   MAX_Y_VALUE = 400;
 
-  weights.resize(10);
+  weights.resize(11);
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 }
@@ -26,7 +27,7 @@ Controller::Controller(double p, double i, double d, int num_points, double max_
   E = 0;
   I = 0;
 
-  weights.resize(num_points);
+  weights.resize(num_points+1);
   for (int i = 0; i < weights.size(); ++i)
     weights[i] = w(i);
 
@@ -77,7 +78,7 @@ int Controller::correction(coord_vector points)
   int p = 0;
   for (int i = 0; i < points.size(); ++i)
   {
-    E += weights[i] * compress(x_distance(points[i].first, MAX_X_VALUE/2));
+    E += weights[i] * compress(x_distance(points[i].first, 0));
     p += weights[i];
   }
 
