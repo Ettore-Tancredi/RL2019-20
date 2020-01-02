@@ -13,17 +13,9 @@
 #include "Controller/Controller.h"
 #include "Log/Log.h"
 // #include "Lib/debugging.h"
-#include "Constants/Parameters.h"
-
 #include "Constants/Line_constants.h"
-
+#include "Constants/Parameters.h"
 int color_set[256][256][256];
-
-int MODE;
-int GRAPHICS;
-int DELAY;
-int SOURCE;
-std::string GALLERY_PATH;
 
 int main(int argc, char *argv[])
 {
