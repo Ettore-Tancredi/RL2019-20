@@ -1,5 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include "Parameters.h"
+
 
 #ifndef CAMERA_H
 #define CAMERA_H

@@ -13,13 +13,22 @@
 #include "Controller/Controller.h"
 #include "Log/Log.h"
 // #include "Lib/debugging.h"
+#include "Constants/Parameters.h"
 
 #include "Constants/Line_constants.h"
 
 int color_set[256][256][256];
 
-int main()
+int MODE;
+int GRAPHICS;
+int DELAY;
+int SOURCE;
+std::string GALLERY_PATH;
+
+int main(int argc, char *argv[])
 {
+
+	setParameters(argc, argv);
 
 	Image img(IMG_HEIGHT, IMG_WIDTH);
 	img.load_data("color_data.txt");
@@ -138,12 +147,11 @@ int main()
 						coord_vector line_ends;
 						for (int i = 0; i < paired_vertexes.size(); ++i)
 							line_ends.push_back(medium(paired_vertexes[i].first, paired_vertexes[i].second));
-						
+
 						sort(line_ends.begin(), line_ends.end(), comp_j);
-						
+
 						adjustment = controller.correction({line_ends.front(), line_ends.back()});
 						//correggere con i motori
-
 					}
 				}
 			}
@@ -151,29 +159,47 @@ int main()
 			log.stop_clock();
 			/***************************************************************************************/
 
-			//VISUALIZE (DBG
-			cv::Mat processed_frame = img.handle();
-			graphics.outline(processed_frame, img.visited, img.green_regions);
-			if (lt == STD_LINE)
-				graphics.apply_rig(processed_frame, rig);
-			else
-				graphics.make_hull(paired_vertexes, processed_frame);
+			//VISUALIZE
 
-			graphics.draw(processed_frame);
+			if (MODE != SILENT)
+			{
 
-			std::cout << "Image No. " << img_number << std::endl;
-			log.print_current_execution_time();
-			line.show_data();
+				std::cout << "Image No. " << img_number << std::endl;
+				log.print_current_execution_time();
+				line.show_data();
+				std::cout << "Error: ";
+				if (adjustment == std::numeric_limits<int>::max())
+					std::cout << "\\" << std::endl;
+				else
+					std::cout << adjustment << std::endl;
+				std::cout << std::endl;
 
-			std::cout << "Error: ";
-			if (adjustment == std::numeric_limits<int>::max())
-				std::cout << "\\" << std::endl;
-			else
-				std::cout << adjustment << std::endl;
-			std::cout << std::endl;
+				if (MODE != NOSHOW)
+				{
+					cv::Mat processed_frame = img.handle();
+					if (GRAPHICS == OUTLINE || GRAPHICS == COMPLETE)
+						graphics.outline(processed_frame, img.visited, img.green_regions);
+					else if (GRAPHICS == RIG || GRAPHICS == COMPLETE)
+					{
+						if (lt == STD_LINE)
+							graphics.apply_rig(processed_frame, rig);
+						else
+							graphics.make_hull(paired_vertexes, processed_frame);
+					}
+					else if (GRAPHICS == ORDER)
+						graphics.apply_order(processed_frame, line.getPixelsList());
 
-			//if (cv::waitKey(100) == 'p')
+					graphics.draw(processed_frame);
+				}
+			}
+
+			if (DELAY == NO_DELAY)
 				cv::waitKey(0);
+			else
+			{
+				if (cv::waitKey(DELAY) == 'p')
+					cv::waitKey(0);
+			}
 		}
 		log.save();
 	}

@@ -4,18 +4,17 @@
 
 #include "Camera.h"
 
-
 Camera::Camera(bool &flag)
 {
     cap.open(0);
-    
+
     flag = cap.isOpened();
 }
 
 Camera::Camera(bool &flag, const double framerate, const double H, const double W)
 {
     cap.open(0);
-    
+
     flag = cap.isOpened();
 
     cap.set(cv::CAP_PROP_FRAME_WIDTH, W);
@@ -23,16 +22,19 @@ Camera::Camera(bool &flag, const double framerate, const double H, const double 
     cap.set(cv::CAP_PROP_FPS, framerate);
 }
 
-
 void Camera::fillFrame(cv::Mat &frame, int img_number)
 {
-    // bool b = cap.read(frame);
-    // if (!b)
-    //     throw "Unable to take photo";
-    // SAVE AS img_number.png
-
-    bool b = true;
-    frame = cv::imread("/home/luigi/source/repos/rl_2019-20/runs/3-3-12_56/" + std::to_string(img_number) + ".png", cv::IMREAD_COLOR);
-    
+    if (SOURCE == CAMERA)
+    {
+        // bool b = cap.read(frame);
+        // if (!b)
+        //     throw "Unable to take photo";
+        // SAVE AS img_number.png
+        ;
+    }
+    else if (SOURCE == GALLERY)
+    {
+        bool b = true;
+        frame = cv::imread(GALLERY_PATH + std::to_string(img_number) + ".png", cv::IMREAD_COLOR);
+    }
 }
-
