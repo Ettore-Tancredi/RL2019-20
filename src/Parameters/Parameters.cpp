@@ -12,7 +12,6 @@ void setParameters(int argc, char *argv[])
 {
     if (argc > 1)
     {
-        size_t found;
         std::string arg, parameter, option;
         for (int i = 1; i < argc; ++i)
         {
