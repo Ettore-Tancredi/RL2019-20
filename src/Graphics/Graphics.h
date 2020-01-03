@@ -35,8 +35,10 @@ private:
     void join_ends(cv::Mat &, coord, coord, int);
 
 public:
+    Graphics();
     Graphics(std::string);
 
+    void start(std::string);
     void draw(cv::Mat &);
 
     void outline(cv::Mat &, int[800][800], coord_vector &);

@@ -1,69 +1,72 @@
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "Parameters.h"
-int MODE;
-int GRAPHICS;
-int DELAY;
-int SOURCE;
-std::string GALLERY_PATH;
+
+int MODE = SHOW;
+int GRAPHICS = COMPLETE;
+int DELAY = INF;
+std::string SOURCE = "../../runs/3-3-12_56/";
 
 void setParameters(int argc, char *argv[])
 {
-    if (argc)
+    if (argc > 1)
     {
-        int index = 1;
-        if (argv[index] == "SILENT")
+        size_t found;
+        std::string arg, parameter, option;
+        for (int i = 1; i < argc; ++i)
         {
-            MODE = SILENT;
-        }
-        else if (argv[index] == "NOSHOW")
-        {
-            MODE = NOSHOW;
-        }
-        else if (argv[index] == "SHOW")
-        {
-            MODE = SHOW;
-            ++index;
-            if (argv[index] == "OUTLINE")
-                GRAPHICS = OUTLINE;
-            else if (argv[index] == "SURFACE")
-                GRAPHICS = SURFACE;
-            else if (argv[index] == "RIG")
-                GRAPHICS = RIG;
-            else if (argv[index] == "COMPLETE")
-                GRAPHICS = COMPLETE;
-            else if (argv[index] == "ORDER")
-                GRAPHICS = ORDER;
-        }
-        ++index;
+            arg = argv[i];
+            parameter = arg.substr(0, arg.find("="));
+            option = arg.substr(arg.find("=") + 1, arg.length());
 
-        if (argv[index] == "NO_DELAY")
-        {
-            MODE = NO_DELAY;
+            if (parameter == "MODE")
+            {
+                if (option == "SILENT")
+                {
+                    MODE = SILENT;
+                    DELAY = NODELAY;
+                }
+                else if (option == "NOSHOW")
+                {
+                    MODE = NOSHOW;
+                    DELAY = NODELAY;
+                }
+                else if (option == "SHOW")
+                    MODE = SHOW;
+            }
+            else if (parameter == "GRAPHICS")
+            {
+                if (option == "OUTLINE")
+                    GRAPHICS = OUTLINE;
+                else if (option == "SURFACE")
+                    GRAPHICS = SURFACE;
+                else if (option == "RIG")
+                    GRAPHICS = RIG;
+                else if (option == "COMPLETE")
+                    GRAPHICS = COMPLETE;
+                else if (option == "ORDER")
+                    GRAPHICS = ORDER;
+            }
+            else if (parameter == "DELAY")
+            {
+                if (option == "NODELAY")
+                    DELAY = NODELAY;
+                else if (option == "INF")
+                    DELAY = INF;
+                else
+                {
+                    std::stringstream convert(option);
+                    convert >> DELAY;
+                }
+            }
+            else if (parameter == "SOURCE")
+            {
+                if (option == "CAMERA")
+                    SOURCE = "CAMERA";
+                else
+                    SOURCE = option;
+            }
         }
-        else
-        {
-            std::stringstream convert(argv[index]); 
-            convert >> DELAY;  
-        }
-        ++index;
-
-        if (argv[index] == "CAMERA")
-            SOURCE = CAMERA;
-        else if (argv[index] == "GALLERY")
-        {
-            SOURCE = GALLERY;
-            ++index;
-             GALLERY_PATH = argv[index];
-        }
-    }
-    else
-    {
-        MODE = SHOW;
-        GRAPHICS = COMPLETE;
-        DELAY = NO_DELAY;
-        SOURCE = GALLERY;
-        GALLERY_PATH = "../../runs/3-3-12_56";
     }
 }
-

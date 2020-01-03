@@ -22,20 +22,15 @@ enum Graphics_options
 
 enum Delay_options
 {
-    NO_DELAY = 0,
+    NODELAY = 0,
+    INF
 };
 
-enum Source_options
-{
-    CAMERA = 0,
-    GALLERY
-};
 
 extern int MODE;
 extern int GRAPHICS;
 extern int DELAY;
-extern int SOURCE;
-extern std::string GALLERY_PATH;
+extern std::string SOURCE;
 
 void setParameters(int argc, char *argv[]);
 

@@ -5,6 +5,30 @@
 #include "cv_types.h"
 #include <vector>
 
+Graphics::Graphics()
+{
+    Graphics::COLORS[G_YELLOW].B = 0;
+    Graphics::COLORS[G_YELLOW].G = 255;
+    Graphics::COLORS[G_YELLOW].R = 255;
+
+    Graphics::COLORS[G_RED].B = 0;
+    Graphics::COLORS[G_RED].G = 0;
+    Graphics::COLORS[G_RED].R = 255;
+
+    Graphics::COLORS[G_BLUE].B = 255;
+    Graphics::COLORS[G_BLUE].G = 0;
+    Graphics::COLORS[G_BLUE].R = 0;
+
+    Graphics::COLORS[G_GREEN].B = 51;
+    Graphics::COLORS[G_GREEN].G = 255;
+    Graphics::COLORS[G_GREEN].R = 0;
+
+    Graphics::COLORS[G_CYAN].B = 255;
+    Graphics::COLORS[G_CYAN].G = 255;
+    Graphics::COLORS[G_CYAN].R = 0;
+}
+
+
 Graphics::Graphics(std::string name)
 {
     windowName = name;
@@ -29,6 +53,12 @@ Graphics::Graphics(std::string name)
     Graphics::COLORS[G_CYAN].B = 255;
     Graphics::COLORS[G_CYAN].G = 255;
     Graphics::COLORS[G_CYAN].R = 0;
+}
+
+void Graphics::start(std::string name)
+{
+    windowName = name;
+    cv::namedWindow(windowName);
 }
 
 void Graphics::draw(cv::Mat &img)

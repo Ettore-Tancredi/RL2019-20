@@ -32,7 +32,10 @@ int main(int argc, char *argv[])
 
 	Log log("run_log.txt");
 
-	Graphics graphics("feed");
+	Graphics graphics;
+
+	if (MODE == SHOW)
+		graphics.start("feed");
 
 	bool camera_opened = true;
 	Camera camera(camera_opened, 30, 400, 400);
@@ -59,6 +62,7 @@ int main(int argc, char *argv[])
 			//TAKE PHOTO
 			try
 			{
+
 				camera.fillFrame(img.handle(), ++img_number);
 			}
 			catch (const char *msg)
@@ -66,7 +70,6 @@ int main(int argc, char *argv[])
 				log.write(msg);
 				break;
 			}
-
 			log.add_time_point();
 			/***************************************************************************************/
 
@@ -151,8 +154,6 @@ int main(int argc, char *argv[])
 			log.stop_clock();
 			/***************************************************************************************/
 
-			//VISUALIZE
-
 			if (MODE != SILENT)
 			{
 
@@ -171,26 +172,29 @@ int main(int argc, char *argv[])
 					cv::Mat processed_frame = img.handle();
 					if (GRAPHICS == OUTLINE || GRAPHICS == COMPLETE)
 						graphics.outline(processed_frame, img.visited, img.green_regions);
-					else if (GRAPHICS == RIG || GRAPHICS == COMPLETE)
+					if (GRAPHICS == RIG || GRAPHICS == COMPLETE)
 					{
 						if (lt == STD_LINE)
 							graphics.apply_rig(processed_frame, rig);
 						else
 							graphics.make_hull(paired_vertexes, processed_frame);
 					}
-					else if (GRAPHICS == ORDER)
+					if (GRAPHICS == ORDER)
 						graphics.apply_order(processed_frame, line.getPixelsList());
 
 					graphics.draw(processed_frame);
 				}
 			}
 
-			if (DELAY == NO_DELAY)
-				cv::waitKey(0);
-			else
+			if (DELAY != NODELAY)
 			{
-				if (cv::waitKey(DELAY) == 'p')
+				if (DELAY == INF)
 					cv::waitKey(0);
+				else
+				{
+					if (cv::waitKey(DELAY) == 'p')
+						cv::waitKey(0);
+				}
 			}
 		}
 		log.save();

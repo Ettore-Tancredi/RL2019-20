@@ -24,7 +24,7 @@ Camera::Camera(bool &flag, const double framerate, const double H, const double 
 
 void Camera::fillFrame(cv::Mat &frame, int img_number)
 {
-    if (SOURCE == CAMERA)
+    if (SOURCE == "CAMERA")
     {
         // bool b = cap.read(frame);
         // if (!b)
@@ -32,9 +32,9 @@ void Camera::fillFrame(cv::Mat &frame, int img_number)
         // SAVE AS img_number.png
         ;
     }
-    else if (SOURCE == GALLERY)
+    else
     {
         bool b = true;
-        frame = cv::imread(GALLERY_PATH + std::to_string(img_number) + ".png", cv::IMREAD_COLOR);
+        frame = cv::imread(SOURCE + std::to_string(img_number) + ".png", cv::IMREAD_COLOR);
     }
 }
