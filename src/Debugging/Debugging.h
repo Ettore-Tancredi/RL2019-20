@@ -5,7 +5,6 @@
 #include <utility>
 #include "cv_types.h"
 
-
 /***********************************************************
   THIS FILE CONTAINS GENERAL PURPOSE DEBUGGING FUNCTIONS:
     - PRINT COORD (A, B)
@@ -17,16 +16,9 @@
 
 namespace debug
 {
-    void printCoord(coord a, char end)
-    {
-        std::cout << "(" << a.first << ", " << a.second << ")" << end;
-    }
+void printCoord(coord a, char end);
 
-    void printCoordP(std::pair<coord, coord> a, char end)
-    {
-        std::cout << "[(" << a.first.first << ", " << a.first.second << ") (" << a.second.first << ", " << a.second.second << ")]" << end;
-    }
-    
-}
+void printCoordP(std::pair<coord, coord> a, char end);
+} // namespace debug
 
 #endif

@@ -12,9 +12,9 @@
 #include "Line/Rig.h"
 #include "Controller/Controller.h"
 #include "Log/Log.h"
-// #include "Lib/debugging.h"
 #include "Constants/Line_constants.h"
-#include "Constants/Parameters.h"
+#include "Parameters/Parameters.h"
+
 int color_set[256][256][256];
 
 int main(int argc, char *argv[])

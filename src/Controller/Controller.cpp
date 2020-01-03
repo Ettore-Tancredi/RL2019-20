@@ -1,7 +1,7 @@
 #include <utility>
 
 #include "Controller.h"
-#include "debugging.h"
+#include "Debugging.h"
 
 Controller::Controller()
 {

@@ -1,18 +1,16 @@
 #ifndef LINE_CONSTANTS
 #define LINE_CONSTANTS
 
+extern const int IMG_HEIGHT;
+extern const int IMG_WIDTH;
+extern const int AVERAGE_LINE_WIDTH;
+extern const int MIN_GREEN_REGION_NODES;
+extern const int MIN_BLACK_REGION_NODES;
 
-const int IMG_HEIGHT = 400;
-const int IMG_WIDTH = 400;
-const int AVERAGE_LINE_WIDTH = 100; //empirically established
-const int MIN_GREEN_REGION_NODES = 50; //guess
-const int MIN_BLACK_REGION_NODES = 50;  //guess
+extern const int NUM_RIG_POINTS;
 
-const int NUM_RIG_POINTS = 10;
-
-const int KP = 10;
-const int KD = 0;
-const int KI = 0;
-
+extern const int KP;
+extern const int KD;
+extern const int KI;
 
 #endif
