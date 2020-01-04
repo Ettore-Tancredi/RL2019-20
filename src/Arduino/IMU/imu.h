@@ -16,7 +16,7 @@ class IMU:public Adafruit_BNO055
     
 
 public:
-  IMU(int something):Adafruit_BNO055(something){};
+  IMU(int);
   Position position;
   void setAngle();
   double getRotationOnX();

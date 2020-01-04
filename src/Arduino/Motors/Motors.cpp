@@ -1,5 +1,7 @@
 #include "Motors.h"
 #include "Arduino.h"
+#include "../IMU/imu.h"
+#include "../Constants/constants.h"
 
 
 
@@ -95,4 +97,30 @@ void Motion::move(int speed_sx, int speed_dx)
 	M_dx.move(speed_dx);
 }
 			   
-			   
+double abs(double x)
+{
+	if (x >= 0)
+		return x;
+	else
+		return -x;
+}
+
+double signOf(double x)
+{
+	if (x == 0)
+		return 1;
+	return x / abs(x);
+}
+
+void Motion::turn(double angle)   //we use mathematical convention (counterclockwise --> positive)
+{
+	imu.setAngle();
+
+	for(double alpha = imu.getRotationOnX(); alpha < agle - 2 || alpha > angle + 2; alpha = imu.getRotationOnX())
+	{
+		move(-STD_SPEED * signOf(angle - alpha), STD_SPEED * signOf(angle - alpha));
+	}
+
+	move(0, 0);  //stop the motors to have a more precise maneuver
+	
+}

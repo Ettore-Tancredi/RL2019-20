@@ -1,6 +1,9 @@
 #ifndef MOTORS_H
 #define MOTORS_H
 
+#include "../IMU/imu.h"
+#include "../Constants/constants.h"
+
 
 class Motor
 {
@@ -23,11 +26,11 @@ class Motion
 {
 private:
 	Motor M_sx, M_dx;
-	//Gyroscope gyroscope
+	IMU imu(IMU_ADDRESS); 
 public:
 	Motion(const int, const int, const int, const int, const int, const int, const int, const int, const int, const int, const bool, const bool);
 	void move(int, int);
-	//void turn(double);
+	void turn(double);
 };
 
 #endif

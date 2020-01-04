@@ -4,6 +4,11 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 
+IMU::IMU(int something) : Adafruit_BNO055(something) 
+{
+	//only inherited constructor
+}
+
 void IMU::setAngle()
 {
   sensors_event_t event;
