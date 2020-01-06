@@ -9,11 +9,11 @@ extern const double OBSTACLE_DELAY;
 extern const int MIN_OBSTACLE_DIST;
 
 enum LINE_TYPE{					//da confrontare con i valori scritti a seriale dall'UDOO
-	INTERRUPT = 1,
-	STD_LINE = 2,
-	T_INTERSECTION = 3,
-	C_INTERSECTION = 4,
-	UNKNOWN = 5
+	INTERRUPT = 0,
+	STD_LINE,
+	T_INTERSECTION,
+	C_INTERSECTION,
+	UNKNOWN
 };
 
 #endif

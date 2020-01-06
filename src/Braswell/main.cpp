@@ -19,6 +19,7 @@ int color_set[256][256][256];
 
 int main(int argc, char *argv[])
 {
+	std::cout << "Ehila" << std::endl;
 	setParameters(argc, argv);
 
 	Image img(IMG_HEIGHT, IMG_WIDTH);

@@ -6,7 +6,7 @@
 int MODE = SHOW;
 int GRAPHICS = COMPLETE;
 int DELAY = INF;
-std::string SOURCE = "../../runs/3-3-12_56/";
+std::string SOURCE = "../../../runs/3-3-12_56/";
 
 void setParameters(int argc, char *argv[])
 {
