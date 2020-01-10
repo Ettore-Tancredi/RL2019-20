@@ -14,6 +14,7 @@
 #include "Log/Log.h"
 #include "Constants/Line_constants.h"
 #include "Parameters/Parameters.h"
+#include "Comm/Braswell_comm.h"
 
 int color_set[256][256][256];
 
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
 {
 	std::cout << "Ehila" << std::endl;
 	setParameters(argc, argv);
+
+	Serial S("", 9600);  //REMEMBER TO SET PORT NAME !!!!!!!!!!!!
 
 	Image img(IMG_HEIGHT, IMG_WIDTH);
 	img.load_data("color_data.txt");
@@ -120,34 +123,45 @@ int main(int argc, char *argv[])
 			int adjustment = std::numeric_limits<int>::max();
 			int lt = line.getType();
 			if (lt == UNKNOWN)
-				; //fare qualcosa
+				S.writeNumber(3); //fare qualcosa
 			else
 			{
 				if (lt == INTERRUPT)
-					; //avanti?
+					S.writeNumber(0); //avanti?
 				if (lt == STD_LINE)
 				{
+					S.writeNumber(1);
 					adjustment = controller.correction(rig.center_points);
+					S.writeNumber(adjustment);
 					//correggere con i motori
 				}
 				else
 				{
-
-					if (line.greenPos[1][0])
-						; //girare
-					else if (line.greenPos[1][1])
-						; //girare
-					else
+					if(!line.greenPos[1][0] && !line.greenPos[1][1])
 					{
+						S.writeNumber(1);  //STD_LINE
 						coord_vector line_ends;
 						for (int i = 0; i < paired_vertexes.size(); ++i)
 							line_ends.push_back(medium(paired_vertexes[i].first, paired_vertexes[i].second));
 
 						sort(line_ends.begin(), line_ends.end(), comp_j);
 
-						adjustment = controller.correction({line_ends.front(), line_ends.back()});
-						//correggere con i motori
+						adjustment = controller.correction({line_ends.front(), medium(line_ends.front(), line_ends.back()), line_ends.back()});
+						S.writeNumber(adjustment);
 					}
+					else
+						S.writeNumber(2);  //INTERSECTION
+					
+					if(line.greenPos[1][0])
+						S.writeChar('T');  //true
+					else
+						S.writeChar('F');  //false
+						
+					if(line.greenPos[1][1])
+						S.writeChar('T');  //true
+					else
+						S.writeChar('F');  //false
+					
 				}
 			}
 
