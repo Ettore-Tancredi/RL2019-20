@@ -11,7 +11,7 @@ int main()
     while (true)
     {
         std::cin >> n;
-        mySerial.writeNumber(n);
+        mySerial.write_int(n);
     }
 
     return 0;

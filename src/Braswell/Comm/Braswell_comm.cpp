@@ -60,14 +60,11 @@ Serial::Serial(char *serial_port)
 void Serial::write_int(int n)
 {
   std::string str_num = std::to_string(n);
+  str_num.append("\n");
   char const *s = str_num.c_str();
 
   for (int i = 0, l = strlen(s); i < l; ++i)
     write(USB, &s[i], 1);
-
-  char end;
-  end = '\n';
-  write(USB, &end, 1);
 }
 
 void Serial::writeNumber(int n)
