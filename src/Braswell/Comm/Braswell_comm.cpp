@@ -8,7 +8,7 @@
 #include <errno.h>   // Error number definitions
 #include <termios.h> // POSIX terminal control definitions
 
-Serial::Serial(char *serial_port)
+Serial::Serial(char *serial_port, int baudrate)
 {
   USB = open(serial_port, O_RDWR | O_NONBLOCK | O_NDELAY);
 

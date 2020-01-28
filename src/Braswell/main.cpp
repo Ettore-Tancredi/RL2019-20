@@ -20,7 +20,6 @@ int color_set[256][256][256];
 
 int main(int argc, char *argv[])
 {
-	std::cout << "Ehila" << std::endl;
 	setParameters(argc, argv);
 
 	Serial S("", 9600);  //REMEMBER TO SET PORT NAME !!!!!!!!!!!!
@@ -31,7 +30,7 @@ int main(int argc, char *argv[])
 	Line line;
 	Rig rig(NUM_RIG_POINTS);
 
-	Controller controller(KP, KI, KD, NUM_RIG_POINTS, IMG_WIDTH, IMG_HEIGHT);
+	Controller line_controller(KP, KI, KD, NUM_RIG_POINTS,IMG_WIDTH/2);
 
 	Log log("run_log.txt");
 
@@ -131,7 +130,7 @@ int main(int argc, char *argv[])
 				if (lt == STD_LINE)
 				{
 					S.writeNumber(1);
-					adjustment = controller.correction(rig.center_points);
+					adjustment = line_controller.correction(rig.center_points);
 					S.writeNumber(adjustment);
 					//correggere con i motori
 				}
@@ -146,7 +145,7 @@ int main(int argc, char *argv[])
 
 						sort(line_ends.begin(), line_ends.end(), comp_j);
 
-						adjustment = controller.correction({line_ends.front(), medium(line_ends.front(), line_ends.back()), line_ends.back()});
+						adjustment = line_controller.correction({line_ends.front(), medium(line_ends.front(), line_ends.back()), line_ends.back()});
 						S.writeNumber(adjustment);
 					}
 					else

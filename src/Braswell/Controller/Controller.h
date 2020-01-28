@@ -10,19 +10,19 @@ class Controller
 private:
   double Kp, Ki, Kd;
   double P, I, D, E;
-  double MAX_X_VALUE, MAX_Y_VALUE;
+  int NUM_POINTS;
+  double MAX_VALUE;
 
   void transform(coord_vector &);
 
-  std::vector<int> weights;
   int w(int);
 
   double compress(double);
-  int x_distance(int, int);
+  double error(coord_vector);
 
 public:
   Controller();
-  Controller(double, double, double, int, double, double);
+  Controller(double, double, double, int, double);
   int correction(coord_vector);
 };
 
