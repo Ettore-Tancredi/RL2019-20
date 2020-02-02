@@ -11,13 +11,16 @@ Motor::Motor(const int D1 = 0,
 	const bool status2 = false,
 	const int PWM_PIN = 0,
 	const int direction = 0,
-	const int enable = 0) :
+	const int enable = 0,
+	const double r = 2.5) :   //radius [cm]
 	DigIN1(D1),
 	DigIN2(D2),
 	SetValueSpeedInput(PWM_PIN),
 	Direction(direction),
-	Enable(enable)
+	Enable(enable),
+	radius(r)
 {
+
 	digitalWrite(enable, LOW);  //motor initially at rest
 	if (status1)
 		digitalWrite(DigIN1, HIGH);
@@ -36,13 +39,17 @@ void Motor::setParameters(const int D1 = 0,
 	const bool status2 = false,
 	const int PWM_PIN = 0,
 	const int direction = 0,
-	const int enable = 0)
+	const int enable = 0,
+	const double r = 2.5)
 {
 	DigIN1 = D1;
 	DigIN2 = D2;
 	SetValueSpeedInput = PWM_PIN;
 	Direction = direction;
 	Enable = enable;
+	radius = r;
+
+
 	digitalWrite(enable, LOW);  //motor initially at rest
 	if (status1)
 		digitalWrite(DigIN1, HIGH);
@@ -55,23 +62,35 @@ void Motor::setParameters(const int D1 = 0,
 		digitalWrite(DigIN2, LOW);
 }
 
+void Motor::stop()
+{
+	digitalWrite(Enable, LOW);
+}
 
-void Motor::move(int speed)
+void Motor::move(int speed)   //if speed = 0 motor angular velocity would be tha minimum one
 {
 	if (speed >= 0)
+		digitalWrite(Direction, FORWARD);
+	else 
+		digitalWrite(Direction, BACKWARD);
+
+	digitalWrite(Enable, HIGH);
+
+	analogWrite(SetValueSpeedInput, speed);
+}
+
+void Motor::move(int speed, bool sign)   //sign = true for positive sign
+{
+	if (sign)
 		digitalWrite(Direction, FORWARD);
 	else
 		digitalWrite(Direction, BACKWARD);
 
-
-	if (speed == 0)
-		digitalWrite(Enable, LOW); //the motor only stops with speed = 0 (choose a very low minimum speed)
-	else
-		digitalWrite(Enable, HIGH);
-
+	digitalWrite(Enable, HIGH);
 
 	analogWrite(SetValueSpeedInput, speed);
 }
+
 
 Motion::Motion(const int D1_sx,
 	const int D2_sx,
@@ -84,10 +103,26 @@ Motion::Motion(const int D1_sx,
 	const int direction_dx,
 	const int enable_dx,
 	const bool status1,
-	const bool status2)
+	const bool status2,
+	const double r,
+	const double k)
 {
-	M_sx.setParameters(D1_sx, status1, D2_sx, status2, PWM_PIN_sx, direction_sx, enable_sx);
-	M_dx.setParameters(D1_dx, status1, D2_dx, status2, PWM_PIN_dx, direction_dx, enable_dx);
+	K = k;
+	radius = r;
+	
+	if (status1)
+		digIN1_status = 1;
+	else
+		digIN1_status = 0;
+
+	if (status2)
+		digIN1_status = 1;
+	else
+		digIN1_status = 0;
+
+
+	M_sx.setParameters(D1_sx, status1, D2_sx, status2, PWM_PIN_sx, direction_sx, enable_sx, r);
+	M_dx.setParameters(D1_dx, status1, D2_dx, status2, PWM_PIN_dx, direction_dx, enable_dx, r);
 }
 
 
@@ -95,6 +130,12 @@ void Motion::move(int speed_sx, int speed_dx)
 {
 	M_sx.move(speed_sx);
 	M_dx.move(speed_dx);
+}
+
+void Motion::move(int speed_sx, bool sign_sx, int speed_dx, bool sign_dx)
+{
+	M_sx.move(speed_sx, sign_sx);
+	M_dx.move(speed_dx, sign_dx);
 }
 			   
 double abs(double x)
@@ -121,6 +162,24 @@ void Motion::turn(double angle)   //we use mathematical convention (counterclock
 		move(-STD_SPEED * signOf(angle - alpha), STD_SPEED * signOf(angle - alpha));
 	}
 
-	move(0, 0);  //stop the motors to have a more precise maneuver
+	M_sx.stop();
+	M_dx.stop();  //stop the motors to have a more precise maneuver
 	
+}
+
+const double pi = 3.14159;
+
+void Motion::move_for(double dist)
+{
+	M_sx.stop();
+	M_dx.stop();  //for better precision
+
+	double std_linear_speed = (table[digIN1_status][digIN2_status].v_min + ((table[digIN1_status][digIN2_status].v_max - table[digIN1_status][digIN2_status].v_min) * double(STD_SPEED) / 255.0)) * 2 * pi * K * radius * 60;  //  [cm / sec]
+	int delta_t = dist * 1000 / std_linear_speed;  // [milliseconds]
+
+	move(STD_SPEED, STD_SPEED);   //minimum speed
+	delay(delta_t);
+
+	M_sx.stop();
+	M_dx.stop();
 }
