@@ -17,7 +17,7 @@ That's pretty much it.
 
 ## Contributors
 
-+ Luigi (the guy who will murder you if you make a mess)
++ Luigi 
 + Nicola
 + Martino
 + Gabriele

@@ -18,10 +18,9 @@ class Serial
     struct termios tty;
     struct termios tty_old;
     int USB;
-  //  ofSerial serial;
 
     public:
-    Serial(char*);
+    Serial(char*, int);
     void writeNumber(int);
     void writeChar(char);
     void write_int(int n);

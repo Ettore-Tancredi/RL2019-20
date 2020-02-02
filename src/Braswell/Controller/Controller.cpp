@@ -11,15 +11,11 @@ Controller::Controller()
   E = 0;
   I = 0;
 
-  MAX_X_VALUE = 400;
-  MAX_Y_VALUE = 400;
-
-  weights.resize(11);
-  for (int i = 0; i < weights.size(); ++i)
-    weights[i] = w(i);
+  NUM_POINTS = 10;
+  MAX_VALUE = 200;
 }
 
-Controller::Controller(double p, double i, double d, int num_points, double max_x_val, double max_y_val)
+Controller::Controller(double p, double i, double d, int num_points, double max_val)
 {
   Kp = p;
   Ki = i;
@@ -27,22 +23,19 @@ Controller::Controller(double p, double i, double d, int num_points, double max_
   E = 0;
   I = 0;
 
-  weights.resize(num_points+1);
-  for (int i = 0; i < weights.size(); ++i)
-    weights[i] = w(i);
-
-  MAX_X_VALUE = max_x_val;
-  MAX_Y_VALUE = max_y_val;
+  NUM_POINTS = num_points;
+  MAX_VALUE = max_val;
 }
 
-int Controller::w(int n)
+
+int Controller::w(int i)
 {
-  return weights.size() - n;
+  return NUM_POINTS - i;
 }
 
 double Controller::compress(double n)
 {
-  return n / (MAX_X_VALUE / 2);
+  return n / (MAX_VALUE);
 }
 
 /*****************************************************************************************
@@ -57,8 +50,8 @@ void Controller::transform(coord_vector &points)
   for (int i = 0; i < points.size(); ++i)
   {
     std::swap(points[i].first, points[i].second);
-    points[i].first -= MAX_X_VALUE / 2;
-    points[i].second = MAX_Y_VALUE - points[i].second;
+    points[i].first -= MAX_VALUE;
+    points[i].second = 2*MAX_VALUE - points[i].second;
   }
 }
 
@@ -67,22 +60,27 @@ int Controller::x_distance(int x1, int x2)
   return x1 - x2;
 }
 
-
-int Controller::correction(coord_vector points)
+double Controller::error(coord_vector points)
 {
   transform(points);
-
-  double E_prec = E;
-  E = 0;
-
+  double e = 0;
   int p = 0;
   for (int i = 0; i < points.size(); ++i)
   {
-    E += weights[i] * compress(x_distance(points[i].first, 0));
-    p += weights[i];
+    e += w(i) * compress(points[i].first);
+    p += w(i);
   }
 
-  E /= p;
+  e /= p;
+
+  return e;
+}
+
+int Controller::correction(coord_vector points)
+{
+  double E_prec = E;
+
+  E = error(points);
 
   if (E == 0)
     E_prec = 0, I = 0;
