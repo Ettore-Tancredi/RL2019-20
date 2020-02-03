@@ -25,18 +25,30 @@ void loop()
 	{
 		M.move(0, 0);   // stop
 		M.turn(90);   //check for the sign 
-		M.move(STD_SPEED, STD_SPEED);
-		delay(OBSTACLE_DELAY);
+		M.move_for(MAX_OBSTACLE_DIM);
 		M.move(0, 0);   // stop
 		M.turn(-90);   //check for the sign 
-		M.move(STD_SPEED, STD_SPEED);
-		delay(OBSTACLE_DELAY);
+		M.move_for(MAX_OBSTACLE_DIM);
 		M.move(0, 0);   // stop
 		M.turn(-90);   //check for the sign 
-		M.move(STD_SPEED, STD_SPEED);
-		delay(OBSTACLE_DELAY);
+		M.move_for(MAX_OBSTACLE_DIM);
 		M.move(0, 0);   // stop
 		M.turn(90);   //check for the sign 
+
+		/*
+		******experimental******
+
+		M.move(0, 0);   // stop
+		M.turn(90);   //check for the sign
+		M.move_for(MAX_OBSTACLE_DIM);
+		M.move(0, 0);   // stop
+		M.turn(-90);   //check for the sign
+		M.move_for(MAX_OBSTACLE_DIM);
+		M.move(0, 0);   // stop
+		M.turn(-30);    //low slope for better insertion on the line
+		M.move(STD_SPEED, STD_SPEED);   //robot will see INTERRUPT until he reaches the line
+
+		*/
 	}
 	else
 	{
@@ -45,8 +57,7 @@ void loop()
 		switch (type)
 		{
 		case INTERRUPT:
-			M.move(STD_SPEED, STD_SPEED);
-			delay(INTERRUPT_DELAY);
+			M.move_for(INTERRUPT_JUMP);   //try just        M.move(STD_SPEED, STD_SPEED)
 			break;
 		case STD_LINE:
 			int left_correction = STD_SPEED + adjustment, right_correction = STD_SPEED - adjustment;
@@ -71,26 +82,20 @@ void loop()
 				M.turn(180);
 			else if(greenPos[0])
 			{
-				M.move(STD_SPEED, STD_SPEED);
-				delay(100);
-				M.move(0, 0);
+				M.move_for(3);  //move for 3 cm
 				M.turn(90);
-				M.move(STD_SPEED, STD_SPEED);
+				M.move_for(3);  //move for 3 cm
 				delay(300);
 			}
 			else if(greenPos[1])
 			{
-				M.move(STD_SPEED, STD_SPEED);
-				delay(100);
-				M.move(0, 0);
+				M.move_for(3);  //move for 3 cm
 				M.turn(-90);
-				M.move(STD_SPEED, STD_SPEED);
-				delay(300);
+				M.move_for(3);  //move for 3 cm
 			}
 			break;
 		case UNKNOWN:
-			M.move(STD_SPEED, STD_SPEED);
-			delay(INTERRUPT_DELAY);
+			M.move_for(INTERRUPT_JUMP);
 			break;
 		default:
 			break;

@@ -7,8 +7,8 @@
 const int IMU_ADDRESS = 1; 
 const int TOF_ADDRESS = 1;
 const int STD_SPEED = 1;
-const double INTERRUPT_DELAY = 1;
-const double OBSTACLE_DELAY = 1;
+const double INTERRUPT_JUMP = 1;   //expressed in cm
+const double MAX_OBSTACLE_DIM = 15;   //expressed in cm
 const int MIN_OBSTACLE_DIST = 30;  //expressed in mm
 
 const speed_range table[0][0].v_min = -1;   //determinare sperimentalmente
