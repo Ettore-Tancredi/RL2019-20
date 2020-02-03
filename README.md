@@ -19,7 +19,6 @@ That's pretty much it.
 
 + Luigi 
 + Nicola
-+ Martino
 + Gabriele
 
 
