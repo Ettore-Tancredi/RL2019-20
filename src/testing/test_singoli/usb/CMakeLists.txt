@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_STANDARD 14)
-project( example )
+project( test )
 
 include_directories(Comm)
 set(SOURCES serial_test.cpp Comm/Braswell_comm.cpp)
