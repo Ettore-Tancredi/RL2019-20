@@ -1,5 +1,5 @@
 #include "Motors.h"
-#include "Arduino.h"
+#include <Arduino.h>
 #include "../IMU/imu.h"
 #include "../Constants/constants.h"
 
@@ -125,6 +125,12 @@ Motion::Motion(const int D1_sx,
 	M_dx.setParameters(D1_dx, status1, D2_dx, status2, PWM_PIN_dx, direction_dx, enable_dx, r);
 }
 
+void Motion::stop()
+{
+	M_sx.stop();
+	M_dx.stop();
+}
+
 
 void Motion::move(int speed_sx, int speed_dx)
 {
@@ -162,17 +168,14 @@ void Motion::turn(double angle)   //we use mathematical convention (counterclock
 		move(-STD_SPEED * signOf(angle - alpha), STD_SPEED * signOf(angle - alpha));
 	}
 
-	M_sx.stop();
-	M_dx.stop();  //stop the motors to have a more precise maneuver
-	
+	stop();  //stop the motors to have a more precise maneuver
 }
 
 const double pi = 3.14159;
 
-void Motion::move_for(double dist)
+void Motion::move_for(double dist)   //  [cm]
 {
-	M_sx.stop();
-	M_dx.stop();  //for better precision
+	stop();  //for better precision
 
 	double std_linear_speed = (table[digIN1_status][digIN2_status].v_min + ((table[digIN1_status][digIN2_status].v_max - table[digIN1_status][digIN2_status].v_min) * double(STD_SPEED) / 255.0)) * 2 * pi * K * radius * 60;  //  [cm / sec]
 	int delta_t = dist * 1000 / std_linear_speed;  // [milliseconds]
@@ -180,6 +183,5 @@ void Motion::move_for(double dist)
 	move(STD_SPEED, STD_SPEED);   //minimum speed
 	delay(delta_t);
 
-	M_sx.stop();
-	M_dx.stop();
+	stop();
 }

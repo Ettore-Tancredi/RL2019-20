@@ -4,8 +4,8 @@
 /***********************************************/
 //Fix this values
 /***********************************************/
-const int IMU_ADDRESS = 1; 
-const int TOF_ADDRESS = 1;
+const int IMU_ADDRESS = 0x28;
+const int TOF_ADDRESS = 0x20;
 const int STD_SPEED = 1;
 const double INTERRUPT_JUMP = 1;   //expressed in cm
 const double MAX_OBSTACLE_DIM = 15;   //expressed in cm

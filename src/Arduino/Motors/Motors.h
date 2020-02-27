@@ -40,6 +40,7 @@ public:
 	void move(int, bool, int, bool);
 	void turn(double);
 	void move_for(double);
+	void stop();
 };
 
 #endif

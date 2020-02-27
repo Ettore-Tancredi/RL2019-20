@@ -23,28 +23,28 @@ void loop()
 
 	if (ToF.getDistance() < MIN_OBSTACLE_DIST)
 	{
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(90);   //check for the sign 
 		M.move_for(MAX_OBSTACLE_DIM);
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(-90);   //check for the sign 
 		M.move_for(MAX_OBSTACLE_DIM);
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(-90);   //check for the sign 
 		M.move_for(MAX_OBSTACLE_DIM);
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(90);   //check for the sign 
 
 		/*
 		******experimental******
 
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(90);   //check for the sign
 		M.move_for(MAX_OBSTACLE_DIM);
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(-90);   //check for the sign
 		M.move_for(MAX_OBSTACLE_DIM);
-		M.move(0, 0);   // stop
+		M.stop();   // stop
 		M.turn(-30);    //low slope for better insertion on the line
 		M.move(STD_SPEED, STD_SPEED);   //robot will see INTERRUPT until he reaches the line
 
