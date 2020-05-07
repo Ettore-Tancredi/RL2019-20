@@ -50,6 +50,7 @@ coord_vector Line::getPixelsList()
     return pixels_list;
 }
 
+//SOSTITUIRE CON TOPOLOGICAL SORT
 void Line::new_px(coord new_pixel, coord prev_pixel)
 {
     if (new_pixel == prev_pixel)
