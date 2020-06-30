@@ -67,6 +67,14 @@ void Motor::stop()
 	digitalWrite(Enable, LOW);
 }
 
+double abs(double x)
+{
+	if (x >= 0)
+		return x;
+	else
+		return -x;
+}
+
 void Motor::move(int speed)   //if speed = 0 motor angular velocity would be tha minimum one
 {
 	if (speed >= 0)
@@ -76,7 +84,7 @@ void Motor::move(int speed)   //if speed = 0 motor angular velocity would be tha
 
 	digitalWrite(Enable, HIGH);
 
-	analogWrite(SetValueSpeedInput, speed);
+	analogWrite(SetValueSpeedInput, abs(speed));
 }
 
 void Motor::move(int speed, bool sign)   //sign = true for positive sign
@@ -142,14 +150,6 @@ void Motion::move(int speed_sx, bool sign_sx, int speed_dx, bool sign_dx)
 {
 	M_sx.move(speed_sx, sign_sx);
 	M_dx.move(speed_dx, sign_dx);
-}
-			   
-double abs(double x)
-{
-	if (x >= 0)
-		return x;
-	else
-		return -x;
 }
 
 double signOf(double x)
